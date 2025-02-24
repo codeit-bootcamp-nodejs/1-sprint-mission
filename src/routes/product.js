@@ -30,9 +30,48 @@ router.post("/", async (req, res) => {
   }
 });
 
-// 상품 목록 조회 API (GET /products)
+//일단 완성하고 다시 보기 get
 router.get("/", async (req, res) => {
-  // 나중에 구현할 코드
+  try {
+    const { offset = 0, limit = 10, order = "recent", search = "" } = req.query;
+
+    let orderBy;
+    switch (order) {
+      case "oldest":
+        orderBy = { createdAt: "asc" };
+        break;
+      case "recent":
+      default:
+        orderBy = { createdAt: "desc" };
+    }
+
+    const where = search
+      ? {
+          OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        }
+      : {};
+
+    const products = await prisma.product.findMany({
+      where,
+      orderBy,
+      skip: parseInt(offset),
+      take: parseInt(limit),
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        createdAt: true,
+      },
+    });
+
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "상품 목록 조회 중 오류가 발생했습니다." });
+  }
 });
 
 // 상품 상세 조회 API (GET /products/:id)
