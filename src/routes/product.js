@@ -126,9 +126,27 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-// 상품 삭제 API (DELETE /products/:id)
 router.delete("/:id", async (req, res) => {
-  // 나중에 구현할 코드
+  try {
+    const { id } = req.params;
+
+    const existingProduct = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!existingProduct) {
+      return res.status(404).json({ error: "해당 상품을 찾을 수 없습니다." });
+    }
+
+    await prisma.product.delete({
+      where: { id },
+    });
+
+    res.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "상품 삭제 중 오류가 발생했습니다." });
+  }
 });
 
 export default router;
