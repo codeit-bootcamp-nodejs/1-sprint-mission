@@ -1,8 +1,25 @@
 {
   "devDependencies": {
+    "nodemon": "^3.1.9",
     "prisma": "^6.4.0"
   },
   "dependencies": {
-    "@prisma/client": "^6.4.0"
-  }
+    "@prisma/client": "^6.4.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "name": "sprint-mission3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "seed": "node prisma/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
