@@ -1,10 +1,12 @@
 import express from "express";
 import productRouter from "./routes/product.js";
+import articleRouter from "./routes/article.js";
 
 const app = express();
-app.use(express.json()); // JSON 데이터를 받기 위한 미들웨어 추가
+app.use(express.json());
 
 app.use("/products", productRouter);
+app.use("/articles", articleRouter);
 
 app.listen(4000, () => {
   console.log("Server is listening on port 4000");

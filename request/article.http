@@ -1,0 +1,26 @@
+##
+POST http://localhost:4000/articles
+Content-Type: application/json
+
+{
+  "title": "article Let's go ",
+  "content": "bts 손흥민 봉준호."
+}
+
+###
+GET http://localhost:4000/articles
+
+###
+GET http://localhost:4000/articles/7ad16bd0-138b-4da4-899b-127aedd7e58f
+
+###
+DELETE http://localhost:4000/articles/7ad16bd0-138b-4da4-899b-127aedd7e58f
+
+### 
+PATCH http://localhost:4000/articles/7ad16bd0-138b-4da4-899b-127aedd7e58f
+Content-Type: application/json
+
+{
+  "title": "이앙잉이",
+  "content": "안녕하세요"
+}
