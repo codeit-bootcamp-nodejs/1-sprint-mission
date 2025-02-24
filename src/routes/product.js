@@ -74,14 +74,56 @@ router.get("/", async (req, res) => {
   }
 });
 
-// 상품 상세 조회 API (GET /products/:id)
 router.get("/:id", async (req, res) => {
-  // 나중에 구현할 코드
+  try {
+    const { id } = req.params; // URL에서 id 가져오기
+
+    // Prisma를 사용해 해당 id의 상품 찾기
+    const product = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    // 상품이 존재하지 않을 경우 404 응답
+    if (!product) {
+      return res.status(404).json({ error: "해당 상품을 찾을 수 없습니다." });
+    }
+
+    // 상품 정보를 JSON으로 응답
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "상품 조회 중 오류가 발생했습니다." });
+  }
 });
 
-// 상품 수정 API (PATCH /products/:id)
 router.patch("/:id", async (req, res) => {
-  // 나중에 구현할 코드
+  try {
+    const { id } = req.params;
+    const { name, description, price, tags } = req.body;
+
+    const existingProduct = await prisma.product.findUnique({
+      where: { id },
+    });
+
+    if (!existingProduct) {
+      return res.status(404).json({ error: "해당 상품을 찾을 수 없습니다." });
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
+        name: name || existingProduct.name,
+        description: description || existingProduct.description,
+        price: price || existingProduct.price,
+        tags: tags || existingProduct.tags,
+      },
+    });
+
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "상품 수정 중 오류가 발생했습니다." });
+  }
 });
 
 // 상품 삭제 API (DELETE /products/:id)
