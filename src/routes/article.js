@@ -2,19 +2,17 @@ import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { assert } from "superstruct";
 import { CreateArticle } from "../structs.js";
+import { validateArticle } from "../middlewares/validation.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
-router.post("/", async (req, res) => {
+router.post("/", validateArticle, async (req, res) => {
   try {
-    assert(req.body, CreateArticle);
     const { title, content } = req.body;
-
     const newArticle = await prisma.article.create({
       data: { title, content },
     });
-
     res.status(201).json(newArticle);
   } catch (error) {
     console.error(error);
@@ -81,7 +79,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", validateArticle, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, content } = req.body;

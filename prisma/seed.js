@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { PRODUCTS, ARTICLES, COMMENTS } from "./mock.js"; // mock.js에서 데이터 불러오기
+import { PRODUCTS, ARTICLES, COMMENTS } from "./mock.js";
 
 const prisma = new PrismaClient();
 

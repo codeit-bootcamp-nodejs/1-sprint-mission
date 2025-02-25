@@ -6,19 +6,12 @@ import { CreateComment } from "../structs.js";
 const router = express.Router();
 const prisma = new PrismaClient();
 
-router.post("/", async (req, res) => {
+router.post("/", validateComment, async (req, res) => {
   try {
-    assert(req.body, CreateComment);
     const { content, productId, articleId } = req.body;
-
     const newComment = await prisma.comment.create({
-      data: {
-        content,
-        productId,
-        articleId,
-      },
+      data: { content, productId, articleId },
     });
-
     res.status(201).json(newComment);
   } catch (error) {
     console.error(error);
@@ -48,7 +41,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", validateComment, async (req, res) => {
   try {
     const { id } = req.params;
     const { content } = req.body;
