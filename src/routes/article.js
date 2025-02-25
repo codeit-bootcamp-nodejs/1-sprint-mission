@@ -1,18 +1,20 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { assert } from "superstruct";
+import { CreateArticle } from "../structs.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 router.post("/", async (req, res) => {
   try {
+    assert(req.body, CreateArticle);
     const { title, content } = req.body;
-    if (!title || !content) {
-      return res.status(400).json({ error: "제목과 내용을 입력해야 합니다." });
-    }
+
     const newArticle = await prisma.article.create({
       data: { title, content },
     });
+
     res.status(201).json(newArticle);
   } catch (error) {
     console.error(error);

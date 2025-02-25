@@ -1,18 +1,15 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { assert } from "superstruct";
+import { CreateProduct } from "../structs.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 router.post("/", async (req, res) => {
   try {
+    assert(req.body, CreateProduct);
     const { name, description, price, tags } = req.body;
-
-    if (!name || !description || !price || !tags) {
-      return res
-        .status(400)
-        .json({ error: "상품 정보를 모두 입력해야 합니다." });
-    }
 
     const newProduct = await prisma.product.create({
       data: {
