@@ -1,7 +1,5 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { assert } from "superstruct";
-import { CreateArticle } from "../structs.js";
 import { validateArticle } from "../middlewares/validation.js";
 
 const router = express.Router();

@@ -1,7 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { assert } from "superstruct";
-import { CreateComment } from "../structs.js";
+import { validateComment } from "../middlewares/validation.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
