@@ -5,18 +5,61 @@ import { validateComment } from "../middlewares/validation.js";
 const router = express.Router();
 const prisma = new PrismaClient();
 
-router.post("/", validateComment, async (req, res) => {
-  try {
-    const { content, productId, articleId } = req.body;
-    const newComment = await prisma.comment.create({
-      data: { content, productId, articleId },
-    });
-    res.status(201).json(newComment);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "댓글 등록 중 오류가 발생했습니다." });
+router.post(
+  "/products/:productId/comments",
+  validateComment,
+  async (req, res) => {
+    try {
+      const { content } = req.body;
+      const { productId } = req.params;
+
+      const existingProduct = await prisma.product.findUnique({
+        where: { id: productId },
+      });
+      if (!existingProduct) {
+        return res.status(404).json({ error: "해당 상품을 찾을 수 없습니다." });
+      }
+
+      const newComment = await prisma.comment.create({
+        data: { content, productId },
+      });
+
+      res.status(201).json(newComment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "댓글 등록 중 오류가 발생했습니다." });
+    }
   }
-});
+);
+
+router.post(
+  "/articles/:articleId/comments",
+  validateComment,
+  async (req, res) => {
+    try {
+      const { content } = req.body;
+      const { articleId } = req.params;
+
+      const existingArticle = await prisma.article.findUnique({
+        where: { id: articleId },
+      });
+      if (!existingArticle) {
+        return res
+          .status(404)
+          .json({ error: "해당 게시글을 찾을 수 없습니다." });
+      }
+
+      const newComment = await prisma.comment.create({
+        data: { content, articleId },
+      });
+
+      res.status(201).json(newComment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "댓글 등록 중 오류가 발생했습니다." });
+    }
+  }
+);
 
 router.get("/", async (req, res) => {
   try {

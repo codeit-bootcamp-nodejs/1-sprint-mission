@@ -1,5 +1,5 @@
 ##
-DELETE http://localhost:4000/products/1
+DELETE http://localhost:4000/products/322dffd8-117d-47ea-94fe-0179d0752741
 
 ###
 POST http://localhost:4000/products
@@ -14,3 +14,16 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/products
+
+//이미지 실험해보기
+###
+POST http://localhost:4000/upload
+Content-Type: multipart/form-data; boundary=Boundary01234567890123456789
+
+--Boundary01234567890123456789
+Content-Disposition: form-data; name="attachment"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+--Boundary01234567890123456789--
+

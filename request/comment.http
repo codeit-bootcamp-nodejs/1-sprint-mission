@@ -1,7 +1,33 @@
+###
 POST http://localhost:4000/comments
 Content-Type: application/json
 
 {
   "content": "추천합니다!",
   "productId": 1
+}
+###
+GET http://localhost:4000/comments?productId=
+
+###
+GET http://localhost:4000/comments?articleId=
+
+###
+DELETE http://localhost:4000/comments/1
+
+###
+PATCH http://localhost:4000/comments/1
+Content-Type: application/json
+
+{
+  "content": "수정된 댓글입니다!"
+}
+
+### 댓글 등록 (상품에 대한 댓글)
+POST http://localhost:4000/products/322dffd8-117d-47ea-94fe-0179d0752741/comments
+Content-Type: application/json
+
+{
+  "content": "이 제품 정말 좋아요!",
+  "productId": "제품의_실제_ID_여기에"
 }
