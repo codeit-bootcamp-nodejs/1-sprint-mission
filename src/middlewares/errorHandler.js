@@ -2,10 +2,13 @@ export function errorHandler(err, req, res, next) {
   console.error("🚨 에러 발생:", err);
 
   // 📌 유효성 검사 에러 (`express-validator`에서 발생)
-  if (err.array) {
+  if (err.errors) {
     return res.status(400).json({
       error: "유효성 검사 실패",
-      details: err.array(),
+      details: err.errors.map((e) => ({
+        field: e.path,
+        message: e.msg,
+      })),
     });
   }
 

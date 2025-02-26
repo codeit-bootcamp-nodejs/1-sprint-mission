@@ -11,11 +11,11 @@ app.use(cors());
 app.use(express.json());
 app.use("/files", uploadRouter);
 app.use("/uploads", express.static("uploads"));
-app.use(errorHandler);
 
 app.use("/products", productRouter);
 app.use("/articles", articleRouter);
 app.use("/", commentRouter);
+app.use(errorHandler);
 
 app.listen(4000, () => {
   console.log("Server is listening on port 4000");

@@ -27,3 +27,13 @@ Content-Type: image/jpeg
 < ./test.jpg
 --Boundary01234567890123456789--
 
+###
+POST http://localhost:4000/products
+Content-Type: application/json
+
+{
+  "name": "",  
+  "description": "",
+  "price": "not-a-number", 
+  "tags": "not-an-array"  
+}
