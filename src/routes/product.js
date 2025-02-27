@@ -18,7 +18,6 @@ router.post("/", validateProduct, async (req, res) => {
   }
 });
 
-//일단 완성하고 다시 보기 get
 router.get("/", async (req, res) => {
   try {
     const { offset = 0, limit = 10, order = "recent", search = "" } = req.query;
@@ -64,19 +63,16 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const { id } = req.params; // URL에서 id 가져오기
+    const { id } = req.params;
 
-    // Prisma를 사용해 해당 id의 상품 찾기
     const product = await prisma.product.findUnique({
       where: { id },
     });
 
-    // 상품이 존재하지 않을 경우 404 응답
     if (!product) {
       return res.status(404).json({ error: "해당 상품을 찾을 수 없습니다." });
     }
 
-    // 상품 정보를 JSON으로 응답
     res.json(product);
   } catch (error) {
     console.error(error);
