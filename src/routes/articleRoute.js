@@ -98,7 +98,7 @@ router
         where: { id },
       });
 
-      res.status(200).send({ message: "Product deleted successfully" });
+      res.status(200).send({ message: "Article deleted successfully" });
     })
   );
 
