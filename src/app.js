@@ -2,12 +2,15 @@ import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
 import multer from "multer";
+import productRoute from "./routes/productRoute.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.use("/product", productRoute);
 
 const upload = multer({ dest: "./uploads" });
 app.use("/files", express.static("uploads"));
