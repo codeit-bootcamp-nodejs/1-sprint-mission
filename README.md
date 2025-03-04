@@ -1,64 +1,86 @@
-# 코드잇 스프린트 미션 1
+# 코드잇 스프린트 미션 3
 
-## 문제 1
+## 기본 요구 사항
 
-- class 키워드를 이용해서 Product 클래스와 ElectronicProduct 클래스를 만들어 주세요.
-  - Product 클래스는 name(상품명) description(상품 설명), price(판매 가격), tags(해시태그 배열), images(이미지 배열), favoriteCount(찜하기 수)프로퍼티를 가집니다.
-  - Product 클래스는 favorite 메소드를 가집니다. favorite 메소드가 호출될 경우 찜하기 수가 1 증가합니다.
-  - ElectronicProduct 클래스는 Product를 상속하며, 추가로 manufacturer(제조사) 프로퍼티를 가집니다.
-- class 키워드를 이용해서 Article 클래스를 만들어 주세요.
-  - Article 클래스는 title(제목), content(내용), writer(작성자), likeCount(좋아요 수) 프로퍼티를 가집니다.
-  - Article 클래스는 like 메소드를 가집니다. like 메소드가 호출될 경우 좋아요 수가 1 증가합니다.
-- 각 클래스 마다 constructor를 작성해 주세요.
-- 추상화/캡슐화/상속/다형성을 고려하여 코드를 작성해 주세요.
+### 공통
 
-## 문제 2
+- PostgreSQL를 이용해 주세요.
+- 데이터 모델 간의 관계를 고려하여 onDelete를 설정해 주세요.
+- 데이터베이스 시딩 코드를 작성해 주세요.
+- 각 API에 적절한 에러 처리를 해 주세요.
+- 각 API 응답에 적절한 상태 코드를 리턴하도록 해 주세요.
 
-- ‘https://panda-market-api-crud.vercel.app/docs’ 의 Article API를 이용하여 아래 함수들을 구현해 주세요.
-  - getArticleList() : GET 메소드를 사용해 주세요.
-    - page, pageSize, keyword 쿼리 파라미터를 이용해 주세요.
-  - getArticle() : GET 메소드를 사용해 주세요.
-  - createArticle() : POST 메소드를 사용해 주세요.
-    - request body에 title, content, image 를 포함해 주세요.
-  - patchArticle() : PATCH 메소드를 사용해 주세요.
-  - deleteArticle() : DELETE 메소드를 사용해 주세요.
-- fetch 혹은 axios를 이용해 주세요.
-  - 응답의 상태 코드가 2XX가 아닐 경우, 에러 메시지를 콘솔에 출력해 주세요.
-- .then() 메소드를 이용하여 비동기 처리를 해주세요.
-- .catch() 를 이용하여 오류 처리를 해주세요.
+## 중고마켓
 
-## 문제 3
+- Product 스키마를 작성해 주세요.
+- id, name, description, price, tags, createdAt, updatedAt필드를 가집니다.
+- 필요한 필드가 있다면 자유롭게 추가해 주세요.
+- 상품 등록 API를 만들어 주세요.
+- name, description, price, tags를 입력하여 상품을 등록합니다.
+- 상품 상세 조회 API를 만들어 주세요.
+- id, name, description, price, tags, createdAt를 조회합니다.
+- 상품 수정 API를 만들어 주세요.
+- PATCH 메서드를 사용해 주세요.
+- 상품 삭제 API를 만들어 주세요.
+- 상품 목록 조회 API를 만들어 주세요.
+- id, name, price, createdAt를 조회합니다.
+- offset 방식의 페이지네이션 기능을 포함해 주세요.
+- 최신순(recent)으로 정렬할 수 있습니다.
+- name, description에 포함된 단어로 검색할 수 있습니다.
+- 각 API에 적절한 에러 처리를 해 주세요.
+- 각 API 응답에 적절한 상태 코드를 리턴하도록 해 주세요.
 
-- ‘https://panda-market-api-crud.vercel.app/docs’ 의 Product API를 이용하여 아래 함수들을 구현해 주세요.
-  - getProductList() : GET 메소드를 사용해 주세요.
-    - page, pageSize, keyword 쿼리 파라미터를 이용해 주세요.
-  - getProduct() : GET 메소드를 사용해 주세요.
-  - createProduct() : POST 메소드를 사용해 주세요.
-    - request body에 name, description, price, tags, images 를 포함해 주세요.
-  - patchProduct() : PATCH 메소드를 사용해 주세요.
-  - deleteProduct() : DELETE 메소드를 사용해 주세요.
-- async/await 을 이용하여 비동기 처리를 해주세요.
-- try/catch 를 이용하여 오류 처리를 해주세요.
+## 자유게시판
 
-## 문제 4
+- Article 스키마를 작성해 주세요.
+- id, title, content, createdAt, updatedAt 필드를 가집니다.
+- 게시글 등록 API를 만들어 주세요.
+- title, content를 입력해 게시글을 등록합니다.
+- 게시글 상세 조회 API를 만들어 주세요.
+- id, title, content, createdAt를 조회합니다.
+- 게시글 수정 API를 만들어 주세요.
+- 게시글 삭제 API를 만들어 주세요.
+- 게시글 목록 조회 API를 만들어 주세요.
+- id, title, content, createdAt를 조회합니다.
+- offset 방식의 페이지네이션 기능을 포함해 주세요.
+- 최신순(recent)으로 정렬할 수 있습니다.
+- title, content에 포함된 단어로 검색할 수 있습니다.
 
-- getProductList()를 통해서 받아온 상품 리스트를 각각 인스턴스로 만들어 products 배열에 저장해 주세요.
-  - 해시태그에 “전자제품”이 포함되어 있는 상품들은 Product 클래스 대신 ElectronicProduct 클래스를 사용해 인스턴스를 생성해 주세요.
-  - 나머지 상품들은 모두 Product 클래스를 사용해 인스턴스를 생성해 주세요.
-- getArticleList()를 통해서 받아온 아티클 리스트를 각각 인스턴스로 만들어 articles 배열에 저장해 주세요.
-  - Article 클래스를 사용해 인스턴스를 생성해 주세요.
+## 댓글
 
-## 문제 5
+- 댓글 등록 API를 만들어 주세요.
+- content를 입력하여 댓글을 등록합니다.
+- 중고마켓, 자유게시판 댓글 등록 API를 따로 만들어 주세요.
+- 댓글 수정 API를 만들어 주세요.
+- PATCH 메서드를 사용해 주세요.
+- 댓글 삭제 API를 만들어 주세요.
+- 댓글 목록 조회 API를 만들어 주세요.
+- id, content, createdAt 를 조회합니다.
+- cursor 방식의 페이지네이션 기능을 포함해 주세요.
+- 중고마켓, 자유게시판 댓글 목록 조회 API를 따로 만들어 주세요.
 
-- 구현한 함수들을 아래와 같이 파일을 분리해 주세요.
-  - export를 활용해 주세요.
-  - ProductService.js 파일 Product API 관련 함수들을 작성해 주세요.
-  - ArticleService.js 파일에 Article API 관련 함수들을 작성해 주세요.
-- 이외의 코드들은 모두 main.js 파일에 작성해 주세요.
-  - import를 활용해 주세요.
-  - 각 함수를 실행하는 코드를 작성하고, 제대로 동작하는지 확인해 주세요.
+## 유효성 검증
 
-## 심화요구사항
+- 상품 등록 시 필요한 필드(이름, 설명, 가격 등)의 유효성을 검증하는 미들웨어를 구현합니다.
+- 게시물 등록 시 필요한 필드(제목, 내용 등)의 유효성 검증하는 미들웨어를 구현합니다.
 
-- Article 클래스에 createdAt(생성일자) 프로퍼티를 만들어 주세요.
-  - 새로운 객체가 생성되어 constructor가 호출될 시 createdAt에 현재 시간을 저장합니다.
+## 이미지 업로드
+
+- multer 미들웨어를 사용하여 이미지 업로드 API를 구현해주세요.
+- 업로드된 이미지는 서버에 저장하고, 해당 이미지의 경로를 response 객체에 포함해 반환합니다.
+
+## 에러 처리
+
+- 모든 예외 상황을 처리할 수 있는 에러 핸들러 미들웨어를 구현합니다.
+- 서버 오류(500), 사용자 입력 오류(400 시리즈), 리소스 찾을 수 없음(404) 등 상황에 맞는 상태값을 반환합니다.
+
+## 라우트 중복 제거
+
+- 중복되는 라우트 경로(예: /users에 대한 get 및 post 요청)를 app.route()로 통합해 중복을 제거합니다.
+- express.Router()를 활용하여 중고마켓/자유게시판 관련 라우트를 별도의 모듈로 구분합니다.
+
+## 배포
+
+- .env 파일에 환경 변수를 설정해 주세요.
+- CORS를 설정해 주세요.
+- render.com으로 배포해 주세요.
