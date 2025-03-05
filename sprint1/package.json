@@ -1,0 +1,23 @@
+{
+  "name": "sprint-mission-1",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/June-Park-developer/1-sprint-mission.git"
+  },
+  "author": "JungEun Park",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/June-Park-developer/1-sprint-mission/issues"
+  },
+  "homepage": "https://github.com/June-Park-developer/1-sprint-mission#readme",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.9"
+  }
+}
