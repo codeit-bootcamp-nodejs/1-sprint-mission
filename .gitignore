@@ -1,0 +1,5 @@
+node_modules
+uploads
+.env
+request/*.http
+# prisma/migrations

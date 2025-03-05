@@ -1,0 +1,38 @@
+###
+GET http://localhost:3000/products
+
+###
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name":"",
+  "description":"test상품입니다.",
+  "price":50000,
+  "tags":["전자제품", "노트북"]
+}
+
+# {
+#   "name":"testPro",
+#   "description":"test상품입니다.",
+#   "price":50000,
+#   "tags":["전자제품", "노트북"]
+# }
+
+###
+GET http://localhost:3000/products/d8b6677b-5e80-43d5-bb66-4311c461feec
+
+###
+DELETE http://localhost:3000/products/49027308-32be-4b1b-839b-c14feb265302
+
+
+###
+PATCH http://localhost:3000/products/c3e39128-5d9f-43ab-a968-684f118438c0
+Content-Type: application/json
+
+{
+  "name":"patched",
+  "description":"수정된 상품 입니다.",
+  "price":30000,
+  "tags":["전자제품", "노트북"]
+}

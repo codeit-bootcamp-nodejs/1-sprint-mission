@@ -1,0 +1,21 @@
+###
+POST http://localhost:3000/comment/2d81b518-2f78-4686-821b-28c5e9cf671d
+Content-Type: application/json
+
+{
+  "content":"아티클 댓글 달기"
+}
+
+###
+PATCH http://localhost:3000/comment/article/52a7262f-8f05-4219-ad87-3111e8f99e50
+Content-Type: application/json
+
+{
+  "content":"아티클 댓글 수정해보기"
+}
+
+###
+DELETE http://localhost:3000/comment/article/372a9d64-a38c-47e7-ad17-e5bb8316d2dc
+
+###
+GET http://localhost:3000/comment//article

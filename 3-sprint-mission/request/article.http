@@ -1,0 +1,26 @@
+### 
+GET http://localhost:3000/articles
+
+###
+POST http://localhost:3000/articles
+Content-Type: application/json
+
+{
+  "title":"API로 생성된 게시글",
+  "content":"추가로 생성된 게시글 입니다."
+}
+
+###
+GET http://localhost:3000/articles/3967ef44-cfd1-4e71-9066-eb5577feb7ad
+
+### 
+DELETE http://localhost:3000/articles/4f724c4b-cfb0-400f-84c8-a4f7ea80f73b
+
+###
+PATCH http://localhost:3000/articles/7408b2d5-7cca-4102-8239-d3b6f6009879
+Content-Type: application/json
+
+{
+  "title":"API로 수정된 게시글",
+  "content":"추가로 수정된 게시글 입니다."
+}

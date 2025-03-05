@@ -1,0 +1,23 @@
+
+###
+POST http://localhost:3000/comment/product/3d995579-79bd-4275-94e2-435f1c8deee2
+Content-Type: application/json
+
+{
+  "content":"댓글 달아보기"
+}
+
+###
+PATCH http://localhost:3000/comment/product/bedae842-f2d2-4ea9-b0ad-ff4f68cd175f
+Content-Type: application/json
+
+{
+  "content":"수정d 댓글"
+}
+
+###
+DELETE http://localhost:3000/comment/product/bedae842-f2d2-4ea9-b0ad-ff4f68cd175f
+
+###
+GET http://localhost:3000/comment/product/3d995579-79bd-4275-94e2-435f1c8deee2
+Content-Type: application/json
