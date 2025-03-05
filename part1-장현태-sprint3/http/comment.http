@@ -1,0 +1,21 @@
+###
+GET http://localhost:3000/comments/article/4
+
+### 
+GET http://localhost:3000/comments/product/
+
+###
+POST http://localhost:3000/comments/article/
+Content-Type: application/json
+
+{
+  "content": "너무 좋아요!!!!",
+}
+
+###
+POST http://localhost:3000/comments/product/
+Content-Type: application/json
+
+{
+  "content": "너무 좋아요!!!!",
+}
