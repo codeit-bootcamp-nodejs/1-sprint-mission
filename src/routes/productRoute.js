@@ -52,7 +52,7 @@ router
         data: { name, description, price, tags },
       });
 
-      res.status(200).send(product);
+      res.status(201).send(product);
     })
   );
 
