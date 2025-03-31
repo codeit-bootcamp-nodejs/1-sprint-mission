@@ -1,10 +1,11 @@
 import express from "express";
 import * as dotenv from "dotenv";
 import cors from "cors";
-import multer from "multer";
 import productRoute from "./routes/productRoute.js";
 import articleRoute from "./routes/articleRoute.js";
 import commentRoute from "./routes/commentRoute.js";
+import userRoute from "./routes/userRoute.js";
+import multer from "multer";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use("", userRoute);
 app.use("/product", productRoute);
 app.use("/article", articleRoute);
 app.use("/comment", commentRoute);
