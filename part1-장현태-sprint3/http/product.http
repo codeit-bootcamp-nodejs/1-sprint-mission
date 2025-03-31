@@ -1,0 +1,30 @@
+###
+GET http://localhost:3000/products/?search=의&offset=40
+
+
+
+###
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name": "Product 1",
+  "description": "Description 1",
+  "price": 100,
+  "tags": ["tag1", "tag2"]
+}
+
+###
+PATCH http://localhost:3000/articles/cm7eeh3y500001ab81whlrl3v
+Content-Type: application/json
+
+{
+  "name": "수정된 상품이름",
+  "description": "수정된 상품설명명",
+  "price": 100,
+  "tags": ["tag1", "tag2"]
+}
+
+
+###
+DELETE http://localhost:3000/articles/cm7czw4j400001a0kj43xlcl8
