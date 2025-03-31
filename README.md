@@ -5,7 +5,7 @@
 주어진 기본 요구사항과 심화 요구사항을 구현하였습니다.<br/><br/>
 
 <div align="center">
-<img src="../test.png" width="30%" height="30%">
+<img src="./test.png" width="30%" height="30%">
 </div>
 <br/>
 스프린트 미션 3을 기반으로 한 미션이기 때문에 articles와 products의 중복 기능은 제외하고 아이디를 바꿔가며 postman을 통해 테스트했습니다.
