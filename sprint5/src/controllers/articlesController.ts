@@ -1,3 +1,4 @@
+import { Request, Response } from 'express';
 import { create } from 'superstruct';
 import { prisma } from '../lib/prismaClient';
 import NotFoundError from '../lib/errors/NotFoundError';
@@ -9,7 +10,7 @@ import {
 } from '../structs/articlesStructs';
 import { CreateCommentBodyStruct, GetCommentListParamsStruct } from '../structs/commentsStruct';
 
-export async function createArticle(req, res) {
+export async function createArticle(req: Request, res: Response) {
   const data = create(req.body, CreateArticleBodyStruct);
   const { title, content, image } = data;
 
@@ -19,7 +20,7 @@ export async function createArticle(req, res) {
       content,
       image,
       user: {
-        connect: { id: req.user.id },
+        connect: { id: req.user!.id },
       },
     },
   });
@@ -27,7 +28,7 @@ export async function createArticle(req, res) {
   return res.status(201).send(article);
 }
 
-export async function getArticle(req, res) {
+export async function getArticle(req: Request, res: Response) {
   const { id } = create(req.params, IdParamsStruct);
 
   const article = await prisma.article.findUnique({ where: { id } });
@@ -38,23 +39,23 @@ export async function getArticle(req, res) {
   return res.send(article);
 }
 
-export async function updateArticle(req, res) {
+export async function updateArticle(req: Request, res: Response) {
   const { id } = create(req.params, IdParamsStruct);
   const data = create(req.body, UpdateArticleBodyStruct);
 
   const article = await prisma.article.update({ where: { id }, data });
   if (!article) {
-    throw new NotFoundError('article', articleId);
+    throw new NotFoundError('article', id);
   }
 
-  if (article.userId !== req.user.id) {
+  if (article.userId !== req.user!.id) {
     return res.status(403).json({ message: '수정 권한이 없습니다.' });
   }
   const updated = await prisma.article.update({ where: { id }, data });
   return res.send(article);
 }
 
-export async function deleteArticle(req, res) {
+export async function deleteArticle(req: Request, res: Response) {
   const { id } = create(req.params, IdParamsStruct);
 
   const article = await prisma.article.findUnique({ where: { id } });
@@ -62,7 +63,7 @@ export async function deleteArticle(req, res) {
   if (!article) {
     throw new NotFoundError('article', id);
   }
-  if (article.userId !== req.user.id) {
+  if (article.userId !== req.user!.id) {
     return res.status(403).json({ message: '삭제 권한이 없습니다.' });
   }
 
@@ -70,7 +71,7 @@ export async function deleteArticle(req, res) {
   return res.status(204).send();
 }
 
-export async function getArticleList(req, res) {
+export async function getArticleList(req: Request, res: Response) {
   const { page, pageSize, orderBy, keyword } = create(req.query, GetArticleListParamsStruct);
 
   const where = {
@@ -91,7 +92,7 @@ export async function getArticleList(req, res) {
   });
 }
 
-export async function createComment(req, res) {
+export async function createComment(req: Request, res: Response) {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { content } = create(req.body, CreateCommentBodyStruct);
 
@@ -104,14 +105,14 @@ export async function createComment(req, res) {
     data: {
       article: { connect: { id: articleId } },
       content,
-      user: { connect: { id: req.user.id } },
+      user: { connect: { id: req.user!.id } },
     },
   });
 
   return res.status(201).send(comment);
 }
 
-export async function getCommentList(req, res) {
+export async function getCommentList(req: Request, res: Response) {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const { cursor, limit } = create(req.query, GetCommentListParamsStruct);
 
