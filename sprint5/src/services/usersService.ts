@@ -1,7 +1,14 @@
 import { prisma } from '../lib/prismaClient';
 import bcrypt from 'bcryptjs';
+import { User, Product } from '@prisma/client';
 
-export const updateMyInfoService = async (userId, updateData) => {
+type UpdateUserInput = {
+  email?: string;
+  nickname?: string;
+  image?: string;
+};
+
+export const updateMyInfoService = async (userId: string, updateData: UpdateUserInput): Promise<Omit<User, 'password'>> => { 
   const updated = await prisma.user.update({
     where: { id: userId },
     data: updateData,
@@ -18,7 +25,7 @@ export const updateMyInfoService = async (userId, updateData) => {
   return updated;
 };
 
-export const updateMyPasswordService = async (userId, currentPassword, newPassword) => {
+export const updateMyPasswordService = async (userId: string, currentPassword: string, newPassword: string): Promise<void> => {
   const user = await prisma.user.findUnique({ where: { id: userId } });
 
   if (!user) {
@@ -38,7 +45,7 @@ export const updateMyPasswordService = async (userId, currentPassword, newPasswo
   });
 };
 
-export const getMyProductsService = async (userId) => {
+export const getMyProductsService = async (userId:string): Promise<Product[]> => {
   const products = await prisma.product.findMany({
     where: { userId },
     select: {
@@ -50,6 +57,7 @@ export const getMyProductsService = async (userId) => {
       images: true,
       createdAt: true,
       updatedAt: true,
+      userId: true,
     },
   });
 
