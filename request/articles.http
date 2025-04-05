@@ -1,0 +1,39 @@
+###
+GET http://localhost:3000/articles
+
+###
+GET http://localhost:3000/articles?order=oldest
+
+###
+GET http://localhost:3000/articles?offset=0&limit=2
+
+###
+GET http://localhost:3000/articles/f9ef1d3a-29a2-4f9b-aeca-3b7af0625837
+
+###
+GET http://localhost:3000/articles?content=Invstment
+
+###
+POST http://localhost:3000/articles
+Content-Type: application/json
+
+{
+  "title": "PRISMA를 이용한 DATABASE 사용법", 
+  "content": "IT"
+}
+
+###
+PATCH http://localhost:3000/articles/37ed2175-0d2e-427d-831d-d074119930eb
+Content-Type: application/json
+
+{
+  "title": "해리포터 마법사의 돌", 
+  "content": "Fantasy"
+}
+
+###
+DELETE  http://localhost:3000/articles/37ed2175-0d2e-427d-831d-d074119930eb
+
+
+###
+GET http://localhost:3000/articles/f9ef1d3a-29a2-4f9b-aeca-3b7af0625837?comments

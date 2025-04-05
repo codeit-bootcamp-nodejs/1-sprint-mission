@@ -1,0 +1,28 @@
+###
+GET http://localhost:3000/comments?cursor=
+###
+GET http://localhost:3000/comments/
+
+###
+POST http://localhost:3000/comments
+Content-Type: application/json
+
+{
+    "content": "어떻게 투자를 해야하는지 알 것 같습니다",
+    "productId": null,
+    "articleId": "f9ef1d3a-29a2-4f9b-aeca-3b7af0625837"
+}
+
+###
+PATCH http://localhost:3000/comments/fcbcfbce-f2fa-46da-9e79-1d59cafe7755
+Content-Type: application/json
+
+{
+    "content": "부동산에 대해 잘 알 수 있었어요.",
+    "productId": null,
+    "articleId": "f9ef1d3a-29a2-4f9b-aeca-3b7af0625837"
+}
+
+###
+DELETE http://localhost:3000/comments/c7785837-5c5c-4926-b938-9bc4f1c4757c
+

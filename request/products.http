@@ -1,0 +1,42 @@
+###
+GET http://localhost:3000/products
+
+###
+GET http://localhost:3000/products?order=oldest
+
+###
+GET http://localhost:3000/products?offset=0&limit=2
+
+###
+GET http://localhost:3000/products/369e807f-8e10-427d-bb3d-5590483df411
+
+###
+GET http://localhost:3000/products?description=쿠진앤에이
+
+###
+POST http://localhost:3000/products
+Content-Type: application/json
+
+{
+  "name": "Apple iPhon 16se5", 
+  "description": "iPhon se시리즈 신상품", 
+  "price": 990000, 
+  "tags": "Electronics"
+}
+
+###
+PATCH http://localhost:3000/products/056db95e-01ee-4b86-96ce-248603dc2b41
+Content-Type: application/json
+
+{
+  "name": "Samsung Galuxy 25 Plus", 
+  "description": "Galuxy 25 신상품", 
+  "price": 1390000, 
+  "tags": "Electronics"
+}
+
+###
+DELETE  http://localhost:3000/products/e0e2579c-5e0b-4cb0-bda1-c650a25ad22b
+
+###
+GET http://localhost:3000/products/fc0bae87-0904-406e-8957-b1e6a45f856c?comments
