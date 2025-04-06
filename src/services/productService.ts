@@ -1,27 +1,34 @@
-import productRepository from "../repositories/productRepository.js";
-import favoriteRepository from "../repositories/favoriteRepository.js";
-import { CreateProduct, PatchProduct } from "../struct.js";
+import productRepository from "../repositories/productRepository";
+import favoriteRepository from "../repositories/favoriteRepository";
+import { CreateProduct, PatchProduct } from "../struct";
 import { assert } from "superstruct";
+
+interface ProductQuery {
+  offset?: number;
+  limit?: number;
+  order?: string;
+  search?: string;
+}
 
 async function getAllProducts({
   offset = 0,
   limit = 10,
   order = "recent",
   search = "",
-}) {
+}: ProductQuery) {
   return await productRepository.findAll({ offset, limit, order, search });
 }
 
-async function createProduct(productData, userId) {
+async function createProduct(productData: unknown, userId: string) {
   assert(productData, CreateProduct);
-  return await productRepository.save({ ...productData, userId });
+  return await productRepository.save({ ...(productData as any), userId });
 }
 
-async function getProductById(id) {
+async function getProductById(id: string) {
   return await productRepository.getById(id);
 }
 
-async function updateProduct(id, data, userId) {
+async function updateProduct(id: string, data: unknown, userId: string) {
   assert(data, PatchProduct);
   const product = await productRepository.getById(id);
   if (!product) {
@@ -33,7 +40,7 @@ async function updateProduct(id, data, userId) {
   return await productRepository.update(id, data);
 }
 
-async function deleteProduct(id, userId) {
+async function deleteProduct(id: string, userId: string) {
   const product = await productRepository.getById(id);
   if (!product) {
     throw new Error("Product not found");
@@ -44,17 +51,17 @@ async function deleteProduct(id, userId) {
   return await productRepository.remove(id);
 }
 
-async function getUserProducts(userId) {
+async function getUserProducts(userId: string) {
   const products = await productRepository.getByUserId(userId);
   if (!products || products.length === 0) {
-    const error = new Error("No products found for this user");
+    const error: any = new Error("No products found for this user");
     error.code = 404;
     throw error;
   }
   return products;
 }
 
-async function toggleFavorite(userId, productId) {
+async function toggleFavorite(userId: string, productId: string) {
   const existingFavorite = await favoriteRepository.findFavorite(
     userId,
     productId
