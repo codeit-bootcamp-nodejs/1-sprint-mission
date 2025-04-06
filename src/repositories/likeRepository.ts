@@ -1,18 +1,22 @@
-import prisma from "../config/prisma.js";
+import prisma from "../config/prisma";
+import { Like, Article } from "@prisma/client";
 
-async function findLikesByUser(userId) {
+async function findLikesByUser(userId: string): Promise<Article[]> {
   return prisma.article.findMany({
     where: {
       likes: {
         some: {
-          userId: userId,
+          userId,
         },
       },
     },
   });
 }
 
-async function findLike(userId, articleId) {
+async function findLike(
+  userId: string,
+  articleId: string
+): Promise<Like | null> {
   return prisma.like.findUnique({
     where: {
       userId_articleId: {
@@ -23,7 +27,7 @@ async function findLike(userId, articleId) {
   });
 }
 
-async function saveLike(userId, articleId) {
+async function saveLike(userId: string, articleId: string): Promise<Like> {
   return prisma.like.create({
     data: {
       userId,
@@ -32,7 +36,7 @@ async function saveLike(userId, articleId) {
   });
 }
 
-async function removeLike(likeId) {
+async function removeLike(likeId: string): Promise<Like> {
   return prisma.like.delete({
     where: {
       id: likeId,
