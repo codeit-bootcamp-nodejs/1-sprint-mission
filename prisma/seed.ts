@@ -1,12 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import {
-  USERS,
-  PRODUCTS,
-  ARTICLES,
-  COMMENTS,
-  FAVORITES,
-  LIKES,
-} from "./mock.js";
+import { USERS, PRODUCTS, ARTICLES, COMMENTS, FAVORITES, LIKES } from "./mock";
 
 const prisma = new PrismaClient();
 
