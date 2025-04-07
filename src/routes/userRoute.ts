@@ -1,6 +1,6 @@
 import express from "express";
-import userController from "../controllers/userController.js";
-import auth from "../middlewares/auth.js";
+import userController from "../controllers/userController";
+import auth from "../middlewares/auth";
 
 const router = express.Router();
 
@@ -24,7 +24,6 @@ router.get(
   auth.verifyAccessToken,
   userController.getUserProducts
 );
-
 router.get(
   "/users/me/favorites",
   auth.verifyAccessToken,
