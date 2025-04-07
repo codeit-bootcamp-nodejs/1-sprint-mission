@@ -1,0 +1,10 @@
+###
+POST http://localhost:3000/files http/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryABCDEFG
+
+------WebKitFormBoundaryABCDEFG
+Content-Disposition: form-data; name="attachment"; filename="url.png"
+Content-Type: image/jpeg
+
+< C:/Users/User_HyeonTae_Win11/Pictures/url.png
+------WebKitFormBoundaryABCDEFG--

@@ -1,0 +1,27 @@
+###
+GET http://localhost:3000/articles/?search=
+
+###
+POST http://localhost:3000/articles/
+Content-Type: application/json
+
+{
+  "title": "적절한 제목목",
+  "content": "너무 좋아요!!!!",
+  "comments":[]
+}
+
+###
+PATCH http://localhost:3000/articles/cm7czw4j400001a0kj43xlcl8
+Content-Type: application/json
+
+{
+  "title": "수정된 게시글",
+  "content": "수정된 게시글내용입니다."
+}
+
+###
+DELETE http://localhost:3000/articles/cm7czw4j400001a0kj43xlcl8
+
+###
+GET http://localhost:3000/
