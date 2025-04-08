@@ -1,38 +1,36 @@
 import { StructError } from 'superstruct';
 import BadRequestError from '../lib/errors/BadRequestError';
 import NotFoundError from '../lib/errors/NotFoundError';
-import { Request, Response, NextFunction } from 'express';
-import {
-  isPrismaError,
-  isSyntaxErrorWithBody,
-} from '../lib/errors/errorGuards';
+import { Request, Response, NextFunction, RequestHandler, ErrorRequestHandler } from 'express';
+import { isPrismaError, isSyntaxErrorWithBody } from '../lib/errors/errorGuards';
 
-export function defaultNotFoundHandler(req: Request, res: Response, next: NextFunction) {
-  return res.status(404).send({ message: 'Not found' });
-}
+export const defaultNotFoundHandler: RequestHandler = (req, res, next) => {
+  res.status(404).send({ message: 'Not found' });
+};
 
-export function globalErrorHandler(err: unknown, req: Request, res: Response, next: NextFunction) {
-  /** From superstruct or application error */
+export const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): void => {
   if (err instanceof StructError || err instanceof BadRequestError) {
-    return res.status(400).send({ message: err.message });
+    res.status(400).send({ message: err.message });
+    return;
   }
 
-  /** From express.json middleware */
   if (isSyntaxErrorWithBody(err)) {
-    return res.status(400).send({ message: 'Invalid JSON' });
+    res.status(400).send({ message: 'Invalid JSON' });
+    return;
   }
 
-  /** Prisma error codes */
-if (isPrismaError(err)) {
-  console.error(err);
-  return res.status(500).send({ message: 'Failed to process data' });
-}
+  if (isPrismaError(err)) {
+    console.error(err);
+    res.status(500).send({ message: 'Failed to process data' });
+    return;
+  }
 
-  /** Application error */
   if (err instanceof NotFoundError) {
-    return res.status(404).send({ message: err.message });
+    res.status(404).send({ message: err.message });
+    return;
   }
 
   console.error(err);
-  return res.status(500).send({ message: 'Internal server error' });
-}
+  res.status(500).send({ message: 'Internal server error' });
+  return;
+};

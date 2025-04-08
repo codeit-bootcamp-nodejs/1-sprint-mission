@@ -28,7 +28,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const prismaClient_1 = require("../lib/prismaClient");
 const JWT_SECRET = process.env.JWT_SECRET || 'mysecretkey';
-const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
+const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '7d');
 const signupService = (_a) => __awaiter(void 0, [_a], void 0, function* ({ email, nickname, password }) {
     const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
     const newUser = yield prismaClient_1.prisma.user.create({
@@ -49,7 +49,11 @@ const loginService = (_a) => __awaiter(void 0, [_a], void 0, function* ({ email,
     const isValid = yield bcryptjs_1.default.compare(password, user.password);
     if (!isValid)
         throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.');
-    const token = jsonwebtoken_1.default.sign({ id: user.id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    const payload = { id: user.id };
+    const options = { expiresIn: JWT_EXPIRES_IN };
+    const token = jsonwebtoken_1.default.sign({ id: user.id }, JWT_SECRET, {
+        expiresIn: JWT_EXPIRES_IN,
+    });
     return { token };
 });
 exports.loginService = loginService;
