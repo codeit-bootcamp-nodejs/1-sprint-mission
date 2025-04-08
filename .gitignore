@@ -1,4 +1,7 @@
-/node_modules
+
 # Keep environment variables out of version control
 .env
-/request
+.DS_Store
+sprint_3/node_modules/
+sprint_3/request/
+sprint_5/node_modules/
