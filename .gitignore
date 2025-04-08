@@ -2,4 +2,5 @@ node_modules/
 uploads/
 .env
 request/
-prisma/migrations/
+/3-sprint-mission/dist/
+/3-sprint-mission/prisma/migrations/

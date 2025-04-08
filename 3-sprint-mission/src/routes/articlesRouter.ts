@@ -1,5 +1,5 @@
 import express from "express";
-import { withAsync } from "../middleware/withAsync.js";
+import { withAsync } from "../middleware/withAsync";
 import {
   createArticle,
   getArticleList,
@@ -8,10 +8,10 @@ import {
   deleteArticle,
   createComment,
   getCommentList,
-  postArticlesLike,
-  deleteArticlesLike,
-} from "../controllers/articlesController.js";
-import { verifyAccessToken, verifyAricleAuth } from "../middleware/auth.js";
+  postArticleLike,
+  deleteArticleLike,
+} from "../controllers/articlesController";
+import { verifyAccessToken, verifyAricleAuth } from "../middleware/auth";
 
 const articlesRouter = express.Router();
 
@@ -19,7 +19,7 @@ articlesRouter.post("/", verifyAccessToken, withAsync(createArticle));
 articlesRouter.post(
   "/likes/:articleId",
   verifyAccessToken,
-  withAsync(postArticlesLike)
+  withAsync(postArticleLike)
 );
 articlesRouter.get("/", withAsync(getArticleList));
 articlesRouter.get("/:id", withAsync(getArticle));
@@ -38,7 +38,7 @@ articlesRouter.delete(
 articlesRouter.delete(
   "/likes/:articleId",
   verifyAccessToken,
-  withAsync(deleteArticlesLike)
+  withAsync(deleteArticleLike)
 );
 articlesRouter.post(
   "/:id/comments",

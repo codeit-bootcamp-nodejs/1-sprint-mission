@@ -1,6 +1,7 @@
-import { JWT_SECRET } from "../lib/constants.js";
+import { JWT_SECRET } from "../lib/constants";
 import { expressjwt } from "express-jwt";
-import { prismaClient } from "../lib/prismaClient.js";
+import { prismaClient } from "../lib/prismaClient";
+import { Request, Response, NextFunction } from "express";
 
 // express-jwt 내부에서 next호출
 // bearer에 있는 jwt가 검증이 되면 requestProperty에 저장
@@ -17,7 +18,11 @@ export const verifyAccessToken = expressjwt({
 });
 
 // comment, article, product 인가
-export async function verifyProductAuth(req, res, next) {
+export async function verifyProductAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   // 상품아이디
   const { id: productId } = req.params;
   const productIdInt = parseInt(productId, 10);
@@ -27,20 +32,24 @@ export async function verifyProductAuth(req, res, next) {
   });
   // 상품id값확인
   if (!product) {
-    const error = new Error("product not found");
-    error.code = 404;
-    throw error;
+    throw new Error("product not found");
   }
+  if (!req.user) {
+    throw new Error("user not found");
+  }
+
   // product모델의 userid값과 요청한 유저 아이디값
-  if (product.userId !== req.user.userId) {
-    const error = new Error("forbbiden");
-    error.code = 403;
-    throw error;
+  if (product.userId !== req.user.id) {
+    throw new Error("forbbiden");
   }
   return next();
 }
 
-export async function verifyAricleAuth(req, res, next) {
+export async function verifyAricleAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const { id: articleId } = req.params;
   const articleIdInt = parseInt(articleId, 10);
   try {
@@ -48,14 +57,15 @@ export async function verifyAricleAuth(req, res, next) {
       where: { id: articleIdInt },
     });
     if (!article) {
-      const error = new Error("product not found");
-      error.code = 404;
-      throw error;
+      throw new Error("product not found");
     }
-    if (article.userId !== req.user.userId) {
-      const error = new Error("forbbiden");
-      error.code = 403;
-      throw error;
+
+    if (!req.user) {
+      throw new Error("user not found");
+    }
+
+    if (article.userId !== req.user.id) {
+      throw new Error("forbbiden");
     }
     return next();
   } catch (error) {
@@ -63,7 +73,11 @@ export async function verifyAricleAuth(req, res, next) {
   }
 }
 
-export async function verifyCommentAuth(req, res, next) {
+export async function verifyCommentAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const { id: commentId } = req.params;
   const commentIdInt = parseInt(commentId, 10);
   try {
@@ -71,14 +85,13 @@ export async function verifyCommentAuth(req, res, next) {
       where: { id: commentIdInt },
     });
     if (!comment) {
-      const error = new Error("comment not found");
-      error.code = 404;
-      throw error;
+      throw new Error("comment not found");
     }
-    if (comment.userId !== req.user.userId) {
-      const error = new Error("forbbiden");
-      error.code = 403;
-      throw error;
+    if (!req.user) {
+      throw new Error("user not found");
+    }
+    if (comment.userId !== req.user.id) {
+      throw new Error("forbbiden");
     }
     return next();
   } catch (error) {

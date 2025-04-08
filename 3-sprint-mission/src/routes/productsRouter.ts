@@ -1,5 +1,5 @@
 import express from "express";
-import { withAsync } from "../middleware/withAsync.js";
+import { withAsync } from "../middleware/withAsync";
 import {
   createProduct,
   getProduct,
@@ -10,11 +10,14 @@ import {
   getCommentList,
   postProductsLike,
   deleteProductsLike,
-} from "../controllers/productsController.js";
-import { verifyAccessToken, verifyProductAuth } from "../middleware/auth.js";
+  getUserProducts,
+  getUserLikeProducts,
+} from "../controllers/productsController";
+import { verifyAccessToken, verifyProductAuth } from "../middleware/auth";
 
 const productsRouter = express.Router();
 
+productsRouter.get("/likes", verifyAccessToken, withAsync(getUserLikeProducts));
 productsRouter.post("/", verifyAccessToken, withAsync(createProduct));
 productsRouter.get("/:id", withAsync(getProduct));
 productsRouter.patch(
@@ -46,5 +49,6 @@ productsRouter.post(
   withAsync(createComment)
 );
 productsRouter.get("/:id/comments", withAsync(getCommentList));
+productsRouter.get("/user/:userId", withAsync(getUserProducts));
 
 export default productsRouter;
