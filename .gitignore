@@ -1,8 +1,9 @@
 /node_modules
-
 .env
 /tests
 /prisma/migrations
-/public
-test.js
 1-sprint-mission/
+
+# Uploaded files
+public/*
+!public/.gitkeep
