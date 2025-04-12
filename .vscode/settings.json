@@ -1,0 +1,14 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 5439,
+      "askForPassword": true,
+      "driver": "Redshift Driver (Dedicated ver)",
+      "name": "pizza_place_connection",
+      "database": "pizza_place",
+      "username": "yutaeksong"
+    }
+  ]
+}
