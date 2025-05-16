@@ -21,4 +21,18 @@ export class NotificationService {
 
     return notification;
   }
+
+  static async getUserNotifications(userId: number): Promise<Notification[]> {
+    return prismaClient.notification.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  static async getUnreadNotificationCount(userId: number): Promise<number> {
+    return prismaClient.notification.count({
+      where: { userId, read: false }
+    });
+  }
 }
+

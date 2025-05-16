@@ -60,6 +60,12 @@ export async function getMyFavoriteList(req: Request, res: Response) {
 
 export async function getMyNotifications(req: Request, res: Response) {
   const userId = req.user.id;
+
+  if (req.query.unreadOnly === 'true') {
+    const count = await NotificationService.getUnreadNotificationCount(userId);
+    res.json({ unreadCount: count });
+  }
+
   const notifications = await NotificationService.getUserNotifications(userId);
   res.json(notifications);
 }
