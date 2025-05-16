@@ -34,5 +34,13 @@ export class NotificationService {
       where: { userId, read: false }
     });
   }
+
+  static async readNotification(id: number, userId: number) {
+    return prismaClient.notification.updateMany({
+      where: { id, userId },
+      data: { read: true }
+    });
+  }
+  
 }
 
