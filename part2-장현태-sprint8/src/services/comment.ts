@@ -1,11 +1,14 @@
+import articleRepository from "../repositories/articleRepository";
 import commentRepository from "../repositories/commentRepository";
+import { createNotification } from "./notification";
+import { emitNotification } from "./socket";
 
 export async function fetchComments() {
   return await commentRepository.getMany();
 }
 
 export async function addCommentToArticle(
-  userId: string,
+  userId: number,
   commentData: {
     content: string;
     articleId: string;
@@ -19,7 +22,22 @@ export async function addCommentToArticle(
       },
     },
   };
-  return await commentRepository.save(Number(userId), newCommentData);
+  const newComment = await commentRepository.save(
+    Number(userId),
+    newCommentData
+  );
+  const articleAuthor = await articleRepository.getArticleAuthorIdByArticleId(
+    commentData.articleId
+  );
+  if (Number(userId) === articleAuthor) return newComment;
+
+  await createNotification(articleAuthor, "comment");
+
+  emitNotification(articleAuthor, {
+    message: `New comment on your article`,
+    type: "comment",
+  });
+  return newComment;
 }
 
 export async function addCommentToProduct(

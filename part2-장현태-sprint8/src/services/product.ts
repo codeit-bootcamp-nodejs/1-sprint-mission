@@ -1,5 +1,6 @@
 import productRepository from "../repositories/productRepository";
 import likeRepository from "../repositories/likeRepository";
+import { emitNotification } from "./socket";
 
 export async function fetchProducts(query: {
   offset: string;
@@ -35,13 +36,29 @@ export async function updateProductById(
     tags: string[];
   }
 ) {
+  const existingProduct = await productRepository.getById(id);
+  if (!existingProduct) {
+    throw new Error("Product not found");
+  }
+
   const NewproductData = {
     name: product.name,
     description: product.description,
     price: product.price,
     tags: product.tags,
   };
-  return await productRepository.update(id, NewproductData);
+
+  const Newproduct = await productRepository.update(id, NewproductData);
+
+  if (Newproduct.price !== existingProduct.price) {
+    Newproduct.like.map((like) => {
+      emitNotification(like.userId, {
+        message: `Price changed ${existingProduct.price} to ${Newproduct.price}`,
+        type: "product price changed",
+      });
+    });
+  }
+  return Newproduct;
 }
 
 export async function removeProductById(id: string) {

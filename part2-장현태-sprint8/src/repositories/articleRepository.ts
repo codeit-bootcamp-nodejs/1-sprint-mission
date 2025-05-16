@@ -1,3 +1,4 @@
+import { get } from "http";
 import prisma from "../config/prisma";
 import { Article } from "@prisma/client";
 
@@ -55,6 +56,18 @@ async function getById(id: string) {
       id: id,
     },
   });
+}
+
+async function getArticleAuthorIdByArticleId(id: string) {
+  const article = await prisma.article.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      authorId: true,
+    },
+  });
+  return article!.authorId;
 }
 
 async function save(
@@ -118,6 +131,7 @@ async function getAllLikedProduct(userId: number) {
 export default {
   getAll,
   getById,
+  getArticleAuthorIdByArticleId,
   save,
   update,
   deleteById,

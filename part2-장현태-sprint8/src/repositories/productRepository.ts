@@ -94,6 +94,17 @@ async function update(
       id: id,
     },
     data: data,
+    include: {
+      like: {
+        include: {
+          user: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
   });
 }
 

@@ -23,7 +23,10 @@ export const postArticleComment: RequestHandler = async function (
 ) {
   try {
     const commentData = { ...req.body, articleId: req.params.id };
-    const comment = await addCommentToArticle(req.user!.userId, commentData);
+    const comment = await addCommentToArticle(
+      Number(req.user!.userId),
+      commentData
+    );
     return res.json(comment);
   } catch (error) {
     next(error);
