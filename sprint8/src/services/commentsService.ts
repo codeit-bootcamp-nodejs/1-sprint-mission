@@ -6,6 +6,8 @@ import BadRequestError from '../lib/errors/BadRequestError';
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import Comment from '../types/Comment';
+import { NotificationService } from './notificationService';
+import { NotificationType } from '@prisma/client';
 
 type CreateCommentData = Omit<
   Comment,
@@ -39,6 +41,15 @@ export async function createComment(data: CreateCommentData): Promise<Comment> {
     articleId: data.articleId ?? null,
     productId: data.productId ?? null,
   });
+
+  if (data.articleId) {
+    const article = await articlesRepository.getArticle(data.articleId);
+    if (article && article.userId !== data.userId) {
+      await NotificationService.createNotification(article.userId, NotificationType.NEW_COMMENT, {
+        articleId: article.id,
+      });
+    }
+  }
   return comment;
 }
 

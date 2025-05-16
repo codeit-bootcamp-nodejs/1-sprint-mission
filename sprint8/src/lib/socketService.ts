@@ -57,6 +57,7 @@ export class SocketService {
   };
 
   sendNotification(userId: number, notification: Notification): void {
+    console.log(`[Socket] emit to user:${userId}`, notification);
     this.io.to(`user:${userId}`).emit('notification', notification);
   }
 }

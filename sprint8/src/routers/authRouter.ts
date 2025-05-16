@@ -4,6 +4,11 @@ import { withAsync } from '../lib/withAsync';
 
 const authRouter = express.Router();
 
+authRouter.get('/ping', (req, res) => {
+    console.log('▶️ authRouter /ping 호출됨');
+    res.json({ ok: true });
+  });
+
 authRouter.post('/register', withAsync(register));
 authRouter.post('/login', withAsync(login));
 authRouter.post('/logout', withAsync(logout));
