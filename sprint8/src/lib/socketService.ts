@@ -41,6 +41,8 @@ export class SocketService {
       socket.userId = decoded.userId;
 
       socket.join(`user:${socket.userId}`);
+      console.log(`[Socket] user ${socket.userId} joined room user:${socket.userId}`);
+      console.log('현재 rooms:', this.io.sockets.adapter.rooms);
       next();
     } catch (err) {
       console.error('Socket auth failed:', err);

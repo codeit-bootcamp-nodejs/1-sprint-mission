@@ -8,6 +8,7 @@ import {
 } from '../structs/usersStructs';
 import * as usersService from '../services/usersService';
 import * as authService from '../services/authService';
+import { NotificationService } from '../services/notificationService';
 import userResponseDTO from '../dto/userResponseDTO';
 
 export async function getMe(req: Request, res: Response) {
@@ -55,4 +56,10 @@ export async function getMyFavoriteList(req: Request, res: Response) {
     list,
     totalCount,
   });
+}
+
+export async function getMyNotifications(req: Request, res: Response) {
+  const userId = req.user.id;
+  const notifications = await NotificationService.getUserNotifications(userId);
+  res.json(notifications);
 }
