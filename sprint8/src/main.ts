@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import { PORT, PUBLIC_PATH, STATIC_PATH } from './lib/constants';
+import { PUBLIC_PATH, STATIC_PATH } from './lib/constants';
 import articlesRouter from './routers/articlesRouter';
 import productsRouter from './routers/productsRouter';
 import commentsRouter from './routers/commentsRouter';
@@ -10,8 +10,16 @@ import imagesRouter from './routers/imagesRouter';
 import authRouter from './routers/authRouter';
 import usersRouter from './routers/usersRouter';
 import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController';
+import http from 'http';
+import { SocketService } from './lib/socketService';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+const socketService = new SocketService(server);
 
 app.use(cors());
 app.use(express.json());
@@ -28,6 +36,6 @@ app.use('/users', usersRouter);
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`🚀 Server started on port ${PORT}`);
 });
