@@ -1,6 +1,6 @@
 import productRepository from "../repositories/productRepository";
 import likeRepository from "../repositories/likeRepository";
-import { emitNotification } from "./socket";
+import { emitNotification } from "./socketService";
 
 export async function fetchProducts(query: {
   offset: string;

@@ -3,7 +3,7 @@ import {
   getNotificationList,
   getNumUnreadNotifications,
   markAsRead,
-} from "../services/notification";
+} from "../services/notificationService";
 
 export const getNotifications: RequestHandler = async function (
   req,

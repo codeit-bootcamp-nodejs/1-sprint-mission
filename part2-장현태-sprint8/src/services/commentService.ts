@@ -1,7 +1,7 @@
 import articleRepository from "../repositories/articleRepository";
 import commentRepository from "../repositories/commentRepository";
-import { createNotification } from "./notification";
-import { emitNotification } from "./socket";
+import { createNotification } from "./notificationService";
+import { emitNotification } from "./socketService";
 
 export async function fetchComments() {
   return await commentRepository.getMany();

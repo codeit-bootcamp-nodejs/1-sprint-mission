@@ -8,7 +8,7 @@ import notificationRouter from "./routers/notification";
 import { errorHandler } from "./middleware/errorHandler";
 import cookieParser from "cookie-parser";
 import http from "http";
-import { createSocketServer } from "./services/socket";
+import { createSocketServer } from "./services/socketService";
 
 dotenv.config();
 const app = express();
