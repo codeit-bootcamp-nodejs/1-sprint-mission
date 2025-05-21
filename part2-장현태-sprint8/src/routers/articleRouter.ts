@@ -9,22 +9,23 @@ import {
   deleteArticleLike,
 } from "../controllers/articleController";
 import { verifyAccessToken, verifyArticleAuthor } from "../middleware/jwtAuth";
+import { asyncHandler } from "../middleware/asyncHandler";
 
 const articleRouter = express.Router();
 
 articleRouter
   .route("/")
-  .get(getArticleList)
-  .post(verifyAccessToken, postArticle);
+  .get(asyncHandler(getArticleList))
+  .post(verifyAccessToken, asyncHandler(postArticle));
 
 articleRouter
   .route("/:id")
-  .get(verifyAccessToken, getArticle)
-  .patch(verifyAccessToken, verifyArticleAuthor, patchArticle)
-  .delete(verifyAccessToken, verifyArticleAuthor, deleteArticle);
+  .get(verifyAccessToken, asyncHandler(getArticle))
+  .patch(verifyAccessToken, verifyArticleAuthor, asyncHandler(patchArticle))
+  .delete(verifyAccessToken, verifyArticleAuthor, asyncHandler(deleteArticle));
 
 articleRouter
   .route("/:id/like")
-  .post(verifyAccessToken, postArticleLike)
-  .delete(verifyAccessToken, deleteArticleLike);
+  .post(verifyAccessToken, asyncHandler(postArticleLike))
+  .delete(verifyAccessToken, asyncHandler(deleteArticleLike));
 export default articleRouter;

@@ -9,22 +9,23 @@ import {
   deleteProductLike,
 } from "../controllers/productController";
 import { verifyAccessToken, verifyProductAuthor } from "../middleware/jwtAuth";
+import { asyncHandler } from "../middleware/asyncHandler";
 
 const productRouter = express.Router();
 
 productRouter
   .route("/")
-  .get(getProductList)
-  .post(verifyAccessToken, postProduct);
+  .get(asyncHandler(getProductList))
+  .post(verifyAccessToken, asyncHandler(postProduct));
 
 productRouter
   .route("/:id")
-  .get(verifyAccessToken, getProduct)
-  .patch(verifyAccessToken, verifyProductAuthor, patchProduct)
-  .delete(verifyAccessToken, verifyProductAuthor, deleteProduct);
+  .get(verifyAccessToken, asyncHandler(getProduct))
+  .patch(verifyAccessToken, verifyProductAuthor, asyncHandler(patchProduct))
+  .delete(verifyAccessToken, verifyProductAuthor, asyncHandler(deleteProduct));
 
 productRouter
   .route("/:id/like")
-  .post(verifyAccessToken, postProductLike)
-  .delete(verifyAccessToken, deleteProductLike);
+  .post(verifyAccessToken, asyncHandler(postProductLike))
+  .delete(verifyAccessToken, asyncHandler(deleteProductLike));
 export default productRouter;

@@ -4,16 +4,12 @@ import {
   addCommentToProduct,
   updateCommentById,
   removeCommentById,
-} from "../services/comment";
+} from "../services/commentService";
 import { RequestHandler } from "express";
 
 export const getCommentList: RequestHandler = async function (req, res, next) {
-  try {
-    const comments = await fetchComments();
-    return res.json(comments);
-  } catch (error) {
-    next(error);
-  }
+  const comments = await fetchComments();
+  return res.json(comments);
 };
 
 export const postArticleComment: RequestHandler = async function (
@@ -21,16 +17,12 @@ export const postArticleComment: RequestHandler = async function (
   res,
   next
 ) {
-  try {
-    const commentData = { ...req.body, articleId: req.params.id };
-    const comment = await addCommentToArticle(
-      Number(req.user!.userId),
-      commentData
-    );
-    return res.json(comment);
-  } catch (error) {
-    next(error);
-  }
+  const commentData = { ...req.body, articleId: req.params.id };
+  const comment = await addCommentToArticle(
+    Number(req.user!.userId),
+    commentData
+  );
+  return res.json(comment);
 };
 
 export const postProductComment: RequestHandler = async function (
@@ -38,29 +30,17 @@ export const postProductComment: RequestHandler = async function (
   res,
   next
 ) {
-  try {
-    const commentData = { ...req.body, productId: req.params.id };
-    const comment = await addCommentToProduct(req.user!.userId, commentData);
-    return res.json(comment);
-  } catch (error) {
-    next(error);
-  }
+  const commentData = { ...req.body, productId: req.params.id };
+  const comment = await addCommentToProduct(req.user!.userId, commentData);
+  return res.json(comment);
 };
 
 export const patchComment: RequestHandler = async function (req, res, next) {
-  try {
-    const updatedComment = await updateCommentById(req.params.id, req.body);
-    return res.json(updatedComment);
-  } catch (error) {
-    next(error);
-  }
+  const updatedComment = await updateCommentById(req.params.id, req.body);
+  return res.json(updatedComment);
 };
 
 export const deleteComment: RequestHandler = async function (req, res, next) {
-  try {
-    await removeCommentById(req.params.id);
-    return res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
+  await removeCommentById(req.params.id);
+  return res.status(204).end();
 };
