@@ -1,6 +1,8 @@
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import * as productsRepository from '../repositories/productsRepository';
+import { NotificationService } from './notificationService';
+import { NotificationType } from '@prisma/client';
 import { PagePaginationParams, PagePaginationResult } from '../types/pagination';
 import Product from '../types/Product';
 
@@ -43,7 +45,26 @@ export async function updateProduct(id: number, data: UpdateProductData): Promis
   if (existingProduct.userId !== data.userId) {
     throw new ForbiddenError('Should be the owner of the product');
   }
+
+  const priceChanged = data.price !== undefined && data.price !== existingProduct.price;
+
   const updatedProduct = await productsRepository.updateProductWithFavorites(id, data);
+
+  if (priceChanged) {
+    const favorites = await productsRepository.getFavoritesByProductId(id);
+    const favoriteUserIds = favorites.map(fav => fav.userId);
+
+    await Promise.all(
+      favoriteUserIds.map(userId =>
+        NotificationService.createNotification(
+          userId,
+          NotificationType.PRICE_CHANGED,
+          { productId: id, price: data.price }
+        )
+      )
+    );
+  }
+
   return updatedProduct;
 }
 

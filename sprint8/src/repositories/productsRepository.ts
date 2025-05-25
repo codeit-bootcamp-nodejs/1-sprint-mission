@@ -152,3 +152,10 @@ export async function deleteProduct(id: number) {
     where: { id },
   });
 }
+
+export async function getFavoritesByProductId(productId: number) {
+  return prismaClient.favorite.findMany({
+    where: { productId },
+    select: { userId: true },
+  });
+}
