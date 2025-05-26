@@ -78,8 +78,10 @@ export async function cancelProductLike(userId: string, productId: string) {
 export async function checkIsLikedByUser(userId: string, productId: string) {
   const LikedProducts = await productRepository.getAllLikedProduct(userId);
   for (const product of LikedProducts) {
-    return product.id === productId;
+    console.log(product.id, productId);
+    if (product.id === productId) return true;
   }
+  return false;
 }
 
 export async function getProductsByUserId(userId: string) {

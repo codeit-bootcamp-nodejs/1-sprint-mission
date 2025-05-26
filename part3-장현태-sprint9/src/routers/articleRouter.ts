@@ -20,7 +20,7 @@ articleRouter
 
 articleRouter
   .route("/:id")
-  .get(verifyAccessToken, asyncHandler(getArticle))
+  .get(asyncHandler(getArticle))
   .patch(verifyAccessToken, verifyArticleAuthor, asyncHandler(patchArticle))
   .delete(verifyAccessToken, verifyArticleAuthor, asyncHandler(deleteArticle));
 

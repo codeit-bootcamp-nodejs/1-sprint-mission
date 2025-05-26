@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/app.js",
-    "dev": "nodemon --watch src src/app.ts",
-    "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest",
+    "start": "ts-node src/main.ts",
+    "dev": "nodemon --watch src src/main.ts",
+    "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest -i --coverage",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "ts-node prisma/seed.ts"
   },
   "prisma": {
@@ -36,6 +38,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.11.24",
     "@types/supertest": "^6.0.3",
+    "dotenv-cli": "^8.0.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
     "supertest": "^7.1.1",

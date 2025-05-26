@@ -50,8 +50,7 @@ export const createSocketServer = (server: http.Server) => {
   return io;
 };
 
-export const getIO = () => io;
-export const getSocketIdByUserId = (userId: number) => {
+const getSocketIdByUserId = (userId: number) => {
   return userSocketMap.get(userId);
 };
 

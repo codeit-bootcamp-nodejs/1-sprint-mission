@@ -7,13 +7,9 @@ import userRouter from "./routers/userRouter";
 import notificationRouter from "./routers/notificationRouter";
 import { errorHandler } from "./middleware/errorHandler";
 import cookieParser from "cookie-parser";
-import http from "http";
-import { createSocketServer } from "./services/socketService";
 
 dotenv.config();
 const app = express();
-const server = http.createServer(app);
-createSocketServer(server);
 
 app.use(express.json());
 app.use(cookieParser());
@@ -27,6 +23,4 @@ app.use("/notifications", notificationRouter);
 
 app.use(errorHandler);
 
-server.listen(process.env.PORT || 3000, () => {
-  console.log(`Server is running on http://localhost:${process.env.PORT}`);
-});
+export default app;

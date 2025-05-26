@@ -17,6 +17,7 @@ export const getUser: RequestHandler = async (req, res, next) => {
 
 export const loginUser: RequestHandler = async (req, res, next) => {
   const user = await checkUserPassword(req.body.email, req.body.password);
+
   if (!user) {
     return res.status(401).json({ message: "Invalid email or password" });
   }

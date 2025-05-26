@@ -30,7 +30,7 @@ export const getArticle: RequestHandler = async function (req, res, next) {
 export const postArticle: RequestHandler = async function (req, res, next) {
   assert(req.body, createArticleSchema);
   const newArticle = await createNewArticle(req.user!.userId, req.body);
-  return res.json(newArticle);
+  return res.status(201).json(newArticle);
 };
 
 export const patchArticle: RequestHandler = async function (req, res, next) {
