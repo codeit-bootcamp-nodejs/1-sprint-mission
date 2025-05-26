@@ -1,0 +1,63 @@
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(50) NOT NULL,
+  nickname VARCHAR(100) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE products (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  name VARCHAR(20) NOT NULL,
+  description TEXT,
+  price MONEY NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE articles (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE comments (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  commentable_type VARCHAR(20) NOT NULL,
+  commentable_id INTEGER NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE tags (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE images (
+  id SERIAL PRIMARY KEY,
+  image_url TEXT NOT NULL,
+  imageable_type VARCHAR(20) NOT NULL,
+  imageable_id INTEGER NOT NULL
+);
+
+CREATE TABLE product_tags (
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  tag_id INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
+  PRIMARY KEY (product_id, tag_id)
+);
+
+CREATE TABLE product_likes (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, product_id)
+);
+
+CREATE TABLE article_likes (
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  article_id INTEGER NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, article_id)
+);
