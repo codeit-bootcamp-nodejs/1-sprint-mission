@@ -14,60 +14,64 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  email        String    @unique
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
   nickname     String
   image        String?
   password     String
   refreshToken String?
-  provider     String    @default("local")
-  providerId   String?   @unique
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  provider     String         @default("local")
+  providerId   String?        @unique
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
   product      Product[]
   article      Article[]
   comment      Comment[]
   like         Like[]
+  Notification Notification[]
 }
 
 model Product {
-  id          String    @id @default(uuid())
+  id          Int          @id @default(autoincrement())
   name        String
   description String
   price       Int
+  images      String[]
   tags        String[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   comment     Comment[]
-  author      User      @relation(fields: [authorId], references: [id])
+  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    Int
   likes       Like[]
-  likeCount   Int       @default(0)
+  likeCount   Int          @default(0)
+  productTag  ProductTag[]
 }
 
 model Article {
-  id        String    @id @default(uuid())
+  id        Int       @id @default(autoincrement())
   title     String
   content   String
+  images    String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   comment   Comment[]
-  author    User      @relation(fields: [authorId], references: [id])
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
   likes     Like[]
   likeCount Int       @default(0)
 }
 
 model Comment {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  productId String?
+  productId Int?
   product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  articleId String?
+  articleId Int?
   article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
 }
 
@@ -75,10 +79,44 @@ model Like {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  productId String?
+  productId Int?
   product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-  articleId String?
+  articleId Int?
   article   Article? @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      Type
+  content   String
+  isRead    Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
+}
+
+model ProductTag {
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  addAt     DateTime @default(now())
+  tagId     Int
+  tag       Tag      @relation(fields: [tagId], references: [id])
+
+  @@id([productId, tagId])
+}
+
+model Tag {
+  id         Int          @id @default(autoincrement())
+  content    String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  PRODUCTTAG ProductTag[]
+}
+
+enum Type {
+  PRICE
+  COMMENT
 }
