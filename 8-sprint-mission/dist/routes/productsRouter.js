@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const withAsync_1 = require("../middleware/withAsync");
+const productsController_1 = require("../controllers/productsController");
+const auth_1 = require("../middleware/auth");
+const productsRouter = express_1.default.Router();
+productsRouter.get("/likes", auth_1.verifyAccessToken, (0, withAsync_1.withAsync)(productsController_1.getUserLikeProducts));
+productsRouter.post("/", auth_1.verifyAccessToken, (0, withAsync_1.withAsync)(productsController_1.createProduct));
+productsRouter.get("/:id", (0, withAsync_1.withAsync)(productsController_1.getProduct));
+productsRouter.patch("/:id", auth_1.verifyAccessToken, auth_1.verifyProductAuth, (0, withAsync_1.withAsync)(productsController_1.updateProduct));
+productsRouter.post("/likes/:productId", auth_1.verifyAccessToken, (0, withAsync_1.withAsync)(productsController_1.postProductsLike));
+productsRouter.delete("/likes/:productId", auth_1.verifyAccessToken, (0, withAsync_1.withAsync)(productsController_1.deleteProductsLike));
+productsRouter.delete("/:id", auth_1.verifyAccessToken, auth_1.verifyProductAuth, (0, withAsync_1.withAsync)(productsController_1.deleteProduct));
+productsRouter.get("/", (0, withAsync_1.withAsync)(productsController_1.getProductList));
+productsRouter.post("/:id/comments", auth_1.verifyAccessToken, (0, withAsync_1.withAsync)(productsController_1.createComment));
+productsRouter.get("/:id/comments", (0, withAsync_1.withAsync)(productsController_1.getCommentList));
+productsRouter.get("/user/:userId", (0, withAsync_1.withAsync)(productsController_1.getUserProducts));
+exports.default = productsRouter;
