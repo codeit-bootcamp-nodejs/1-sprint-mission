@@ -1,107 +1,166 @@
+import { Request, Response } from 'express';
 import { create } from 'superstruct';
+import bcrypt from 'bcrypt';
+import { prismaClient } from '../lib/prismaClient';
 import {
-  CreateUserBodyStruct,
-  LoginUserBodyStruct,
-  PatchMyInfoBodyStruct,
-  PatchMyPasswordStruct,
-  GetLikedProductListParamsStruct,
+  UpdateMeBodyStruct,
+  UpdatePasswordBodyStruct,
+  GetMyProductListParamsStruct,
+  GetMyFavoriteListParamsStruct,
 } from '../structs/usersStructs';
-import { RequestHandler } from 'express';
-import {
-  CreateUserDTO,
-  GetMyInfoDTO,
-  LoginUserDTO,
-  PatchMyInfoDTO,
-  UserResponseDTO,
-} from '../Dto/userDto';
-import * as usersService from '../services/usersService';
-import { GetMyProductsParamsStruct } from '../structs/productsStruct';
-import * as productsService from '../services/productService';
-import { GetMyLikedProductListDTO } from '../Dto/productDto';
+import NotFoundError from '../lib/errors/NotFoundError';
+import UnauthorizedError from '../lib/errors/UnauthorizedError';
 
-export const createUser: RequestHandler = async (req, res) => {
-  const { email, nickname, password } = create(req.body, CreateUserBodyStruct);
-  const dto: CreateUserDTO = { email, nickname, password };
-  const user: UserResponseDTO = await usersService.createUser(dto);
-  res.status(201).send(user);
-};
+export async function getMe(req: Request, res: Response) {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
-export const loginUser: RequestHandler = async (req, res) => {
-  const { email, password } = create(req.body, LoginUserBodyStruct);
-  const dto: LoginUserDTO = { email, password };
-  const { accessToken, refreshToken } = await usersService.loginUser(dto);
-  res.cookie('refreshToken', refreshToken, {
-    path: '/users/token/refresh',
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
+  const user = await prismaClient.user.findUnique({ where: { id: req.user.id } });
+  if (!user) {
+    throw new NotFoundError('user', req.user.id);
+  }
+
+  const { password: _, ...userWithoutPassword } = user;
+  res.send(userWithoutPassword);
+}
+
+export async function updateMe(req: Request, res: Response) {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const data = create(req.body, UpdateMeBodyStruct);
+
+  const updatedUser = await prismaClient.user.update({
+    where: { id: req.user.id },
+    data,
   });
-  res.cookie('accessToken', accessToken, {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
+
+  const { password: _, ...userWithoutPassword } = updatedUser;
+  res.status(200).send(userWithoutPassword);
+}
+
+export async function updateMyPassword(req: Request, res: Response) {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const { password, newPassword } = create(req.body, UpdatePasswordBodyStruct);
+
+  const user = await prismaClient.user.findUnique({ where: { id: req.user.id } });
+  if (!user) {
+    throw new NotFoundError('user', req.user.id);
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new UnauthorizedError('Invalid credentials');
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  await prismaClient.user.update({
+    where: { id: req.user.id },
+    data: { password: hashedPassword },
   });
-  res.json({ message: 'Log In Success' });
-};
 
-export const getMyInfo: RequestHandler = async (req, res) => {
-  const { userId } = req.user!;
-  const dto: GetMyInfoDTO = { userId };
-  const user: UserResponseDTO = await usersService.getMyInfo(dto);
-  res.json(user);
-};
+  res.status(200).send();
+}
 
-export const patchMyInfo: RequestHandler = async (req, res) => {
-  const { email, nickname, image } = create(req.body, PatchMyInfoBodyStruct);
-  const { userId } = req.user!;
-  const dto: PatchMyInfoDTO = { userId, email, nickname, image };
-  const user: UserResponseDTO = await usersService.patchMyInfo(dto);
-  res.json(user);
-};
+export async function getMyProductList(req: Request, res: Response) {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
-export const patchMyPassword: RequestHandler = async (req, res) => {
-  const { password } = create(req.body, PatchMyPasswordStruct);
-  const { userId } = req.user!;
-  const dto = { password, userId };
-  await usersService.patchMyPassword(dto);
-  res.status(200).json({
-    message: 'Password updated successfully',
+  const { page, pageSize, orderBy, keyword } = create(req.query, GetMyProductListParamsStruct);
+
+  const where = keyword
+    ? {
+        OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
+      }
+    : {};
+  const totalCount = await prismaClient.product.count({
+    where: {
+      ...where,
+      userId: req.user.id,
+    },
   });
-};
-
-export const refreshToken: RequestHandler = async (req, res) => {
-  const { refreshToken } = req.cookies;
-  const { userId } = req.auth!;
-  const dto = { refreshToken, userId };
-  const { refreshToken: newRefreshToken, accessToken } = await usersService.refreshToken(dto);
-  res.cookie('refreshToken', newRefreshToken, {
-    path: '/users/token/refresh',
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
+  const products = await prismaClient.product.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { id: 'desc' } : { id: 'asc' },
+    where: {
+      ...where,
+      userId: req.user.id,
+    },
+    include: {
+      favorites: true,
+    },
   });
-  res.cookie('accessToken', accessToken, {
-    path: '/',
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
+
+  const productsWithFavorites = products.map((product) => ({
+    ...product,
+    favorites: undefined,
+    favoriteCount: product.favorites.length,
+    isFavorited: product.favorites.some((favorite) => favorite.userId === req.user.id),
+  }));
+
+  res.send({
+    list: productsWithFavorites,
+    totalCount,
   });
-  res.json({ message: 'Tokens successfully refreshed' });
-};
+}
 
-export const getMyProductList: RequestHandler = async (req, res) => {
-  const { userId: authorId } = req.user!;
-  const { page, pageSize, orderBy } = create(req.query, GetMyProductsParamsStruct);
-  const dto = { authorId, page, pageSize, orderBy };
-  const productList = await productsService.getMyProductList(dto);
-  res.json(productList);
-};
+export async function getMyFavoriteList(req: Request, res: Response) {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
-export const getMyLikedProductList: RequestHandler = async (req, res) => {
-  const { userId } = req.user!;
-  const { page, pageSize, orderBy } = create(req.query, GetLikedProductListParamsStruct);
-  const dto: GetMyLikedProductListDTO = { userId, page, pageSize, orderBy };
-  const productList = await productsService.getMyLikedProductList(dto);
-  res.json(productList);
-};
+  const { page, pageSize, orderBy, keyword } = create(req.query, GetMyFavoriteListParamsStruct);
+
+  const where = keyword
+    ? {
+        OR: [{ name: { contains: keyword } }, { description: { contains: keyword } }],
+      }
+    : {};
+  const totalCount = await prismaClient.product.count({
+    where: {
+      ...where,
+      favorites: {
+        some: {
+          userId: req.user.id,
+        },
+      },
+    },
+  });
+  const products = await prismaClient.product.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { id: 'desc' } : { id: 'asc' },
+    where: {
+      ...where,
+      favorites: {
+        some: {
+          userId: req.user.id,
+        },
+      },
+    },
+    include: {
+      favorites: true,
+    },
+  });
+
+  const productsWithFavorites = products.map((product) => ({
+    ...product,
+    favorites: undefined,
+    favoriteCount: product.favorites.length,
+    isFavorited: true,
+  }));
+
+  res.send({
+    list: productsWithFavorites,
+    totalCount,
+  });
+}

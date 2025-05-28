@@ -8,20 +8,21 @@ import {
   deleteArticle,
   createComment,
   getCommentList,
-  likeArticle,
+  createLike,
+  deleteLike,
 } from '../controllers/articlesController';
-import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken';
-import { verifyArticleAuth } from '../middlewares/verifyAuth';
-export const articlesRouter = express.Router();
+import authenticate from '../middlewares/authenticate';
 
-articlesRouter.post('/', verifyAccessToken, withAsync(createArticle));
-articlesRouter.get('/', optionalAccessToken, withAsync(getArticleList));
+const articlesRouter = express.Router();
 
-articlesRouter.get('/:id', optionalAccessToken, withAsync(getArticle));
-articlesRouter.patch('/:id', verifyAccessToken, verifyArticleAuth, withAsync(updateArticle));
-articlesRouter.delete('/:id', verifyAccessToken, verifyArticleAuth, withAsync(deleteArticle));
-
-articlesRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment));
+articlesRouter.post('/', authenticate(), withAsync(createArticle));
+articlesRouter.get('/', authenticate({ optional: true }), withAsync(getArticleList));
+articlesRouter.get('/:id', authenticate({ optional: true }), withAsync(getArticle));
+articlesRouter.patch('/:id', authenticate(), withAsync(updateArticle));
+articlesRouter.delete('/:id', authenticate(), withAsync(deleteArticle));
+articlesRouter.post('/:id/comments', authenticate(), withAsync(createComment));
 articlesRouter.get('/:id/comments', withAsync(getCommentList));
+articlesRouter.post('/:id/likes', authenticate(), withAsync(createLike));
+articlesRouter.delete('/:id/likes', authenticate(), withAsync(deleteLike));
 
-articlesRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeArticle));
+export default articlesRouter;

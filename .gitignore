@@ -1,10 +1,11 @@
 # Local files
 .vscode/
 node_modules/
-.env
-.env.example
+.env*
+!.env.example
+build/
 
 # Uploaded files
-public/
+public/*
 !public/.gitkeep
 

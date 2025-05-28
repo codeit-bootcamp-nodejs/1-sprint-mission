@@ -1,24 +1,20 @@
 import express from 'express';
 import { withAsync } from '../lib/withAsync';
 import {
-  createUser,
-  loginUser,
-  getMyInfo,
-  patchMyInfo,
-  patchMyPassword,
-  refreshToken,
-  getMyLikedProductList,
+  getMe,
+  updateMe,
+  updateMyPassword,
   getMyProductList,
+  getMyFavoriteList,
 } from '../controllers/usersController';
-import { verifyAccessToken, verifyRefreshToken } from '../middlewares/verifyToken';
+import authenticate from '../middlewares/authenticate';
 
-export const usersRouter = express.Router();
+const usersRouter = express.Router();
 
-usersRouter.post('/', withAsync(createUser));
-usersRouter.post('/login', withAsync(loginUser));
-usersRouter.get('/me', verifyAccessToken, withAsync(getMyInfo));
-usersRouter.patch('/me', verifyAccessToken, withAsync(patchMyInfo));
-usersRouter.patch('/me/password', verifyAccessToken, withAsync(patchMyPassword));
-usersRouter.get('/me/products', verifyAccessToken, withAsync(getMyProductList));
-usersRouter.post('/token/refresh', verifyRefreshToken, withAsync(refreshToken));
-usersRouter.get('/me/liked-products', verifyAccessToken, withAsync(getMyLikedProductList));
+usersRouter.get('/me', authenticate(), withAsync(getMe));
+usersRouter.patch('/me', authenticate(), withAsync(updateMe));
+usersRouter.patch('/me/password', authenticate(), withAsync(updateMyPassword));
+usersRouter.get('/me/products', authenticate(), withAsync(getMyProductList));
+usersRouter.get('/me/favorites', authenticate(), withAsync(getMyFavoriteList));
+
+export default usersRouter;

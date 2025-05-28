@@ -8,20 +8,21 @@ import {
   getProductList,
   createComment,
   getCommentList,
-  likeProduct,
+  createFavorite,
+  deleteFavorite,
 } from '../controllers/productsController';
-import { verifyAccessToken, optionalAccessToken } from '../middlewares/verifyToken';
-import { verifyProductAuth } from '../middlewares/verifyAuth';
-export const productsRouter = express.Router();
+import authenticate from '../middlewares/authenticate';
 
-productsRouter.post('/', verifyAccessToken, withAsync(createProduct));
-productsRouter.get('/', optionalAccessToken, withAsync(getProductList));
+const productsRouter = express.Router();
 
-productsRouter.get('/:id', optionalAccessToken, withAsync(getProduct));
-productsRouter.patch('/:id', verifyAccessToken, verifyProductAuth, withAsync(updateProduct));
-productsRouter.delete('/:id', verifyAccessToken, verifyProductAuth, withAsync(deleteProduct));
-
-productsRouter.post('/:id/comments', verifyAccessToken, withAsync(createComment));
+productsRouter.post('/', authenticate(), withAsync(createProduct));
+productsRouter.get('/:id', authenticate({ optional: true }), withAsync(getProduct));
+productsRouter.patch('/:id', authenticate(), withAsync(updateProduct));
+productsRouter.delete('/:id', authenticate(), withAsync(deleteProduct));
+productsRouter.get('/', authenticate({ optional: true }), withAsync(getProductList));
+productsRouter.post('/:id/comments', authenticate(), withAsync(createComment));
 productsRouter.get('/:id/comments', withAsync(getCommentList));
+productsRouter.post('/:id/favorites', authenticate(), withAsync(createFavorite));
+productsRouter.delete('/:id/favorites', authenticate(), withAsync(deleteFavorite));
 
-productsRouter.post(`/:id/like`, verifyAccessToken, withAsync(likeProduct));
+export default productsRouter;

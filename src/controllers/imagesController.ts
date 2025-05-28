@@ -1,9 +1,9 @@
+import { Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { PUBLIC_PATH, STATIC_PATH } from '../lib/constants';
-import { BadRequestError } from '../lib/errors/BadRequestError';
-import { RequestHandler } from 'express';
+import BadRequestError from '../lib/errors/BadRequestError';
 
 const ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
 const FILE_SIZE_LIMIT = 5 * 1024 * 1024;
@@ -34,10 +34,15 @@ export const upload = multer({
   },
 });
 
-export const uploadImage: RequestHandler = (req, res) => {
-  const protocol = req.protocol;
+export async function uploadImage(req: Request, res: Response) {
   const host = req.get('host');
-  const filePath = path.join(host as string, STATIC_PATH, req.file?.filename as string);
-  const url = `${protocol}://${filePath}`;
+  if (!host) {
+    throw new BadRequestError('Host is required');
+  }
+  if (!req.file) {
+    throw new BadRequestError('File is required');
+  }
+  const filePath = path.join(host, STATIC_PATH, req.file.filename);
+  const url = `http://${filePath}`;
   res.send({ url });
-};
+}
