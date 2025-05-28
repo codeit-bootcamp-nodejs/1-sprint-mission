@@ -1,9 +1,0 @@
-import { Router } from 'express';
-import { register, login, logout, refreshToken } from '../controllers/authController.js';
-import { withAsync } from '../lib/withAsync.js';
-const authRouter = Router();
-authRouter.post('/register', withAsync(register));
-authRouter.post('/login', withAsync(login));
-authRouter.post('/logout', withAsync(logout));
-authRouter.post('/refresh', withAsync(refreshToken));
-export default authRouter;

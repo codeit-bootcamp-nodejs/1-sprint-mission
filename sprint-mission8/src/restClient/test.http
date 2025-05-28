@@ -1,0 +1,90 @@
+### USER 1 회원가입
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "your-password",
+  "nickname": "TestUser",
+  "image": ""
+}
+
+
+### USER 1 로그인 요청
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "your-password"
+}
+
+### User 2 회원가입
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "user2@example.com",
+  "password": "pass1234",
+  "nickname": "UserTwo",
+  "image": ""
+}
+
+### User 2 로그인
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "user2@example.com",
+  "password": "pass1234"
+}
+
+### 게시글 등록 (User 1 Access Token 필요)
+POST http://localhost:3000/articles
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQ3ODk0ODk3LCJleHAiOjE3NDc4OTg0OTd9.uhtp4I5XVINEA_En0mTly86jDgJSNHMGjInusPYpC0M
+
+{
+  "title": "알림 테스트용 게시글",
+  "content": "내용입니다",
+  "image": ""
+}
+
+### 댓글 작성 (User 2 Access Token 필요)
+POST http://localhost:3000/articles/1/comments
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzQ3ODk0OTQxLCJleHAiOjE3NDc4OTg1NDF9.Yaz2XG3jgHo3v_bQkIjT1-Wu431HmYa6vEJlJIEO6BU
+
+{
+  "content": "User2가 댓글을 달았습니다."
+}
+
+### 상품 등록 (User 1)
+POST http://localhost:3000/products
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQ3ODk0ODk3LCJleHAiOjE3NDc4OTg0OTd9.uhtp4I5XVINEA_En0mTly86jDgJSNHMGjInusPYpC0M
+
+{
+  "name": "알림용 상품",
+  "description": "테스트 상품입니다",
+  "price": 10000,
+  "tags": [],
+  "images": []
+}
+
+### 좋아요 등록 (User 2)
+POST http://localhost:3000/products/1/favorites
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzQ3ODk0OTQxLCJleHAiOjE3NDc4OTg1NDF9.Yaz2XG3jgHo3v_bQkIjT1-Wu431HmYa6vEJlJIEO6BU
+
+### 가격 수정 (User 1)
+PATCH http://localhost:3000/products/1
+Content-Type: application/json
+Cookie: access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQ3ODk0ODk3LCJleHAiOjE3NDc4OTg0OTd9.uhtp4I5XVINEA_En0mTly86jDgJSNHMGjInusPYpC0M
+
+{
+  "price": 8500,
+  "name": "수정된 상품명",
+  "description": "수정된 설명",
+  "tags": [],
+  "images": []
+}
