@@ -1,24 +1,9 @@
-import { User } from "@prisma/client";
-import { Request } from "express";
-
-export interface CustomRequest extends Request {
-  user: {
-    userId: string;
-  };
-}
+import Express from 'express';
 
 declare global {
   namespace Express {
     interface Request {
-      user: {
-        id: string;
-        userId: string;
-      };
-      auth: {
-        userId: string;
-      };
+      user: User;
     }
   }
 }
-
-export {};
