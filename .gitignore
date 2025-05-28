@@ -5,5 +5,7 @@
 1-sprint-mission/
 
 # Uploaded files
-public/*
-!public/.gitkeep
+# public/*
+# !public/.gitkeep
+
+미션8설명서.md

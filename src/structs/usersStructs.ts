@@ -17,3 +17,5 @@ export const UpdatePasswordBodyStruct = object({
 export const GetMyProductListParamsStruct = PageParamsStruct;
 
 export const GetMyFavoriteListParamsStruct = PageParamsStruct;
+
+export const GetMyNotificationParamsStruct = PageParamsStruct;

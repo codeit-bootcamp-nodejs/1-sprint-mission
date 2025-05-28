@@ -10,8 +10,13 @@ import productRouter from './routers/productRouter';
 import commentsRouter from './routers/commentsRouter';
 import usersRouter from './routers/userRouter';
 import imagesRouter from './routers/imageRouter';
-
+import notificationRouter from './routers/notificationRouter';
+import http from 'http';
+import { setupWebSocket } from './services/SocketService';
 const app = express();
+
+const server = http.createServer(app);
+setupWebSocket(server);
 
 app.use(cors());
 app.use(express.json());
@@ -24,10 +29,11 @@ app.use('/products', productRouter);
 app.use('/comments', commentsRouter);
 app.use('/users', usersRouter);
 app.use('/images', imagesRouter);
+app.use('/notifications', notificationRouter);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });

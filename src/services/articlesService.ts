@@ -16,6 +16,8 @@ import {
   updateArticle,
 } from '../repositories/articlesRepository';
 import { createArticleComment, getArticleComment } from '../repositories/commentRepository';
+import { createNotification } from './notificationService';
+import { sendNotification } from './SocketService';
 
 export const createArticleService = async (
   data: CreateArticleDTO,
@@ -98,12 +100,27 @@ export async function createCommentService({
   content,
   userId,
 }: CreateArticleCommentDTO): Promise<CreateArticleCommentDTO> {
-  const existingArticle = await getById(articleId);
-  if (!existingArticle) {
+  const article = await getById(articleId);
+  if (!article) {
     throw new NotFoundError('article', articleId);
   }
 
   const comment = await createArticleComment({ id, articleId, content, userId });
+
+  if (article.userId !== userId) {
+    const payload = {
+      articleId,
+      commenteId: userId,
+      commentPreview: content.slice(0, 30),
+    };
+
+    await createNotification({
+      userId: article.userId,
+      type: 'NEW_COMMENT',
+      payload,
+    });
+    sendNotification(article.userId, payload);
+  }
 
   return {
     id: comment.id,

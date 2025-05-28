@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import {
   getMeService,
   getMyFavoriteListService,
+  getMyNotificationListService,
   getMyProductListService,
   updateMeService,
   updateMyPasswordService,
@@ -9,6 +10,7 @@ import {
 import { create } from 'superstruct';
 import {
   GetMyFavoriteListParamsStruct,
+  GetMyNotificationParamsStruct,
   GetMyProductListParamsStruct,
   UpdateMeBodyStruct,
   UpdatePasswordBodyStruct,
@@ -26,7 +28,7 @@ export const updateMe = async (req: Request, res: Response): Promise<void> => {
 
   const updatedMe = await updateMeService(req.user.id, data);
 
-  res.status(200).json(updateMe);
+  res.status(200).json(updatedMe);
 };
 
 export async function updateMyPassword(req: Request, res: Response): Promise<void> {
@@ -50,5 +52,15 @@ export async function getMyFavoriteList(req: Request, res: Response): Promise<vo
   const { page, pageSize, orderBy, keyword } = create(req.query, GetMyFavoriteListParamsStruct);
   const result = await getMyFavoriteListService(req.user.id, { page, pageSize, orderBy, keyword });
 
+  res.status(200).json(result);
+}
+
+export async function getMyNotificationList(req: Request, res: Response): Promise<void> {
+  if (!req.user) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const params = create(req.query, GetMyNotificationParamsStruct);
+  const result = await getMyNotificationListService(req.user.id, params);
   res.status(200).json(result);
 }

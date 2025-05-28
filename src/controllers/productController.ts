@@ -59,7 +59,17 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
     throw new ForbiddenError('Should be the owner of the product');
   }
 
-  const updatedProduct = await updateProductService(id, { name, description, price, tags, images });
+  const updatedProduct = await updateProductService(id, {
+    id,
+    userId: product.userId,
+    createdAt: product.createdAt,
+    updatedAt: new Date(),
+    name,
+    description,
+    price,
+    tags,
+    images,
+  });
 
   res.status(200).json(updatedProduct);
 };

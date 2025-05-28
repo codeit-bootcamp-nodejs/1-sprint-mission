@@ -4,7 +4,7 @@ import { TokenPair, TokenPayload } from '../types/token';
 
 export function generateTokens(userId: number): Promise<TokenPair> {
   const accessToken = jwt.sign({ id: userId }, JWT_ACCESS_TOKEN_SECRET as string, {
-    expiresIn: '1h',
+    expiresIn: '20h',
   });
 
   const refreshToken = jwt.sign({ id: userId }, JWT_REFRESH_TOKEN_SECRET as string, {

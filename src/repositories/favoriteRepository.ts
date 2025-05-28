@@ -25,3 +25,11 @@ export async function deleteFavorite(id: number) {
     },
   });
 }
+
+export async function getFavoriteList(id: number) {
+  return await prismaClient.favorite.findMany({
+    where: {
+      id,
+    },
+  });
+}

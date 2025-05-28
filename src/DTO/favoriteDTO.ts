@@ -1,14 +1,11 @@
 import { Favorite, Product } from '@prisma/client';
-import { ProductFavoriteDTO } from './productDTO';
+import { GetProductDTO } from './productDTO';
 
 interface ProductFavorites extends Product {
   favorites: Favorite[];
 }
 
-export const favoriteProductDTO = (
-  product: ProductFavorites,
-  userId?: number,
-): ProductFavoriteDTO => {
+export const favoriteProductDTO = (product: ProductFavorites, userId?: number): GetProductDTO => {
   const { favorites, ...rest } = product;
 
   return {

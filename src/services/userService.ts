@@ -1,6 +1,7 @@
 import {
   getByUserId,
   getFavoriteProduct,
+  getMyNotificationList,
   getMyProductList,
   updateMe,
 } from '../repositories/userRepository';
@@ -12,6 +13,8 @@ import { ParamsDTO } from '../DTO/commonDTO';
 import { Product } from '../types/product';
 import { favoriteProductDTO } from '../DTO/favoriteDTO';
 import { GetProductDTO } from '../DTO/productDTO';
+import { GetMyNotificationListDTO } from '../DTO/notificationDTO';
+import { unreadNotificationCount } from '../repositories/notificationRepository';
 
 export async function getMeService(userId: number): Promise<UserWithoutPassword> {
   const user = await getByUserId(userId);
@@ -93,4 +96,24 @@ export async function getMyFavoriteListService(
   const productList = products.map((product) => favoriteProductDTO(product, userId));
 
   return { productList };
+}
+
+export async function getMyNotificationListService(
+  userId: number,
+  params: Omit<ParamsDTO, 'keyword'>,
+): Promise<{ notificationList: GetMyNotificationListDTO[]; unreadCount: number }> {
+  const { page, pageSize, orderBy = 'recent' } = params;
+
+  const notification = await getMyNotificationList(userId, page, pageSize, orderBy);
+
+  const notificationList = notification.map((notification) => ({
+    id: notification.id,
+    userId: notification.userId,
+    type: notification.type,
+    payload: (notification.payload ?? {}) as object,
+    read: notification.read,
+  }));
+
+  const unreadCount = await unreadNotificationCount(userId);
+  return { notificationList, unreadCount };
 }

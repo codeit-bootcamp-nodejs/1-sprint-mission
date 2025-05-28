@@ -16,6 +16,7 @@
     "path": "^0.12.7",
     "prettier": "^3.5.3",
     "prisma": "^5.4.2",
+    "socket.io": "^4.8.1",
     "superstruct": "^1.0.3",
     "uuid": "^11.1.0"
   },
@@ -23,9 +24,6 @@
     "dev": "nodemon --watch src src/app.ts",
     "start": "node dist/app.js",
     "build": "tsc"
-  },
-  "prisma": {
-    "seed": "node prisma/seed.js"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

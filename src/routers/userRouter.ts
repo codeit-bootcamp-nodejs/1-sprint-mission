@@ -4,6 +4,7 @@ import { withAsync } from '../lib/withAsync';
 import {
   getMe,
   getMyFavoriteList,
+  getMyNotificationList,
   getMyProductList,
   updateMe,
   updateMyPassword,
@@ -16,5 +17,6 @@ usersRouter.patch('/me', authenticate(), withAsync(updateMe));
 usersRouter.patch('/me/password', authenticate(), withAsync(updateMyPassword));
 usersRouter.get('/me/products', authenticate(), withAsync(getMyProductList));
 usersRouter.get('/me/favorites', authenticate(), withAsync(getMyFavoriteList));
+usersRouter.get('/me/notifications', authenticate(), withAsync(getMyNotificationList));
 
 export default usersRouter;

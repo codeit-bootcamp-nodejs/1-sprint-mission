@@ -58,3 +58,19 @@ export async function getFavoriteProduct(userId: number, params: ParamsDTO) {
     },
   });
 }
+
+export async function getMyNotificationList(
+  userId: number,
+  page: number,
+  pageSize: number,
+  orderBy: 'recent' | 'oldest',
+) {
+  return await prismaClient.notification.findMany({
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    orderBy: orderBy === 'recent' ? { id: 'desc' } : { id: 'asc' },
+    where: {
+      userId,
+    },
+  });
+}

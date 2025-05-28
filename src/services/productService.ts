@@ -9,6 +9,7 @@ import {
 } from '../DTO/productDTO';
 import NotFoundError from '../lib/errors/NotFoundError';
 import { createProductComment, getProductComment } from '../repositories/commentRepository';
+import { getFavoriteList } from '../repositories/favoriteRepository';
 import {
   createProduct,
   deleteProduct,
@@ -16,6 +17,9 @@ import {
   getProduct,
   updateProduct,
 } from '../repositories/productRepository';
+import { Product } from '../types/product';
+import { createNotification } from './notificationService';
+import { sendNotification } from './SocketService';
 
 export async function createProductService(
   data: CreateProductDTO,
@@ -54,17 +58,39 @@ export async function getProductService(
   };
 }
 
-export async function updateProductService(
-  id: number,
-  data: UpdateProductDTO,
-): Promise<UpdateProductDTO> {
-  const existingProduct = await getById(id);
+export async function updateProductService(id: number, data: Product): Promise<UpdateProductDTO> {
+  const currentProduct = await getById(id);
+  const newPrice = data.price;
 
-  if (!existingProduct) {
-    throw new NotFoundError('product', id);
+  if (!currentProduct) throw new NotFoundError('Product', id);
+
+  const priceChanged = currentProduct.price !== newPrice;
+
+  const updatedProduct = await updateProduct(id, data);
+
+  if (priceChanged) {
+    const favorites = await getFavoriteList(id);
+    await Promise.all(
+      favorites.map(async (fav) => {
+        const payload = {
+          productId: updatedProduct.id,
+          productName: updatedProduct.name,
+          oldPrice: currentProduct.price,
+          newPrice,
+        };
+
+        await createNotification({
+          userId: fav.userId,
+          type: 'PRICE_CHANGED',
+          payload,
+        });
+
+        sendNotification(fav.userId, payload);
+      }),
+    );
   }
 
-  return await updateProduct(id, data);
+  return updatedProduct as UpdateProductDTO;
 }
 
 export async function deleteProductService(id: number) {
