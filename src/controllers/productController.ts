@@ -15,7 +15,7 @@ import AlreadyExstError from '../lib/errors/AlreadyExstError';
 import { Prisma } from '@prisma/client';
 import { UserWithId } from '../../types/user-with-id';
 import { ProductListWithCountDTO, ProductWithLikeDTO } from '../lib/dtos/ProductResDTO';
-import { CommentListWithCursorDTO } from '../lib/dtos/CommentResDTO';
+import { CommentListWithCursorDTO } from '../lib/dtos/CommentDTO';
 import { ASC_STRING, DESC_STRING, RECENT_STRING } from '../config/constants';
 
 export async function createProduct(req: Request, res: Response) {
@@ -93,11 +93,12 @@ export async function createComment(req: Request, res: Response) {
   const reqUser = req.user as UserWithId;
   const { id: userId } = create({ id: reqUser.id }, IdParamsStruct);
 
-  const comment = await commentService.create({
-    productId: productId,
-    content,
-    userId: userId,
-  });
+  const product = await productService.getById(productId);
+  if (!product) {
+    throw new NotFoundError(productService.getEntityName(), productId);
+  }
+
+  const comment = await commentService.create(content, userId, null, productId);
 
   res.status(201).send(comment);
 }
@@ -127,6 +128,11 @@ export async function likeProduct(req: Request, res: Response) {
   const { id: productId } = create(req.params, IdParamsStruct);
   const reqUser = req.user as UserWithId;
   const { id: userId } = create({ id: reqUser.id }, IdParamsStruct);
+
+  const product = await productService.getById(productId);
+  if (!product) {
+    throw new NotFoundError(productService.getEntityName(), productId);
+  }
 
   const existedLike = await likeProductService.getById(userId, productId);
   if (existedLike) {

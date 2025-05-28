@@ -15,7 +15,7 @@ import { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
 import { UserWithId } from '../../types/user-with-id';
 import { ArticleListWithCountDTO, ArticleWithLikeDTO } from '../lib/dtos/ArticleResDTO';
-import { CommentListWithCursorDTO } from '../lib/dtos/CommentResDTO';
+import { CommentListWithCursorDTO } from '../lib/dtos/CommentDTO';
 import { RECENT_STRING, DESC_STRING, ASC_STRING } from '../config/constants';
 
 export async function createArticle(req: Request, res: Response) {
@@ -90,11 +90,12 @@ export async function createComment(req: Request, res: Response) {
   const reqUser = req.user as UserWithId;
   const { id: userId } = create({ id: reqUser.id }, IdParamsStruct);
 
-  const comment = await commentService.create({
-    articleId: articleId,
-    content,
-    userId: userId,
-  });
+  const article = await articleService.getById(articleId);
+  if (!article) {
+    throw new NotFoundError(articleService.getEntityName(), articleId);
+  }
+
+  const comment = await commentService.create(content, userId, articleId);
 
   res.status(201).send(comment);
 }
@@ -126,6 +127,11 @@ export async function likeArticle(req: Request, res: Response) {
   const { id: articleId } = create(req.params, IdParamsStruct);
   const reqUser = req.user as UserWithId;
   const { id: userId } = create({ id: reqUser.id }, IdParamsStruct);
+
+  const article = await articleService.getById(articleId);
+  if (!article) {
+    throw new NotFoundError(articleService.getEntityName(), articleId);
+  }
 
   const existedLike = await likeArticleService.getById(userId, articleId);
   if (existedLike) {
