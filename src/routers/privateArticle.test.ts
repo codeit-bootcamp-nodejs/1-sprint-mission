@@ -45,7 +45,6 @@ describe('인증이 필요한 article 관련 테스트', () => {
       };
 
       const response = await agent.post('/articles').send(article);
-      console.log('응답 바디:', response.body);
       expect(response.status).toBe(201);
       expect(response.body.title).toBe('테스트 입니다.');
       expect(response.body.content).toBe('테스트 게시글입니다.');
