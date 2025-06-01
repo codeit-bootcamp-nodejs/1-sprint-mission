@@ -1,10 +1,11 @@
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import * as productsRepository from '../repositories/productsRepository';
-import * as notificationsRepository from '../repositories/notificationsRepository';
+import * as favoritesRepository from '../repositories/favoritesRepository';
+import * as notificationsService from './notificationsService';
 import { PagePaginationParams, PagePaginationResult } from '../types/pagination';
 import Product from '../types/Product';
-import { emitNotification } from '../lib/socket';
+import { NotificationType } from '../types/Notification';
 
 type CreateProductData = Omit<
   Product,
@@ -45,23 +46,23 @@ export async function updateProduct(id: number, data: UpdateProductData): Promis
   if (existingProduct.userId !== data.userId) {
     throw new ForbiddenError('Should be the owner of the product');
   }
-
-  const priceChanged = data.price !== undefined && data.price !== existingProduct.price;
   const updatedProduct = await productsRepository.updateProductWithFavorites(id, data);
 
-  if (updatedProduct.isFavorited && priceChanged) {
-    await notificationsRepository.createNotification({
-      userId: existingProduct.userId,
-      type: '가격 알림',
-      content: '가격 바뀜',
-      productId: existingProduct.id,
-    });
-
-    emitNotification(existingProduct.userId, {
-      type: '가격 알림',
-      productId: existingProduct.id,
-      content: '가격 바뀜',
-    });
+  /** Price change notification */
+  const previousPrice = existingProduct.price;
+  const updatedPrice = updatedProduct.price;
+  if (previousPrice !== updatedPrice) {
+    const favorites = await favoritesRepository.getFavoritesByProductId(id);
+    const likedUserIds = favorites.map((favorite) => favorite.userId);
+    const notifications = likedUserIds.map((userId) => ({
+      userId,
+      type: NotificationType.PRICE_CHANGED,
+      payload: {
+        productId: id,
+        price: updatedPrice,
+      },
+    }));
+    await notificationsService.createNotifications(notifications);
   }
 
   return updatedProduct;

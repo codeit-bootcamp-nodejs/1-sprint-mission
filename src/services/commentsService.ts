@@ -1,13 +1,14 @@
 import * as articlesRepository from '../repositories/articlesRepository';
 import * as commentsRepository from '../repositories/commentsRepository';
 import * as productsRepository from '../repositories/productsRepository';
-import * as notificationRepository from '../repositories/notificationsRepository';
+import * as notificationsService from './notificationsService';
 import { CursorPaginationParams, CursorPaginationResult } from '../types/pagination';
 import BadRequestError from '../lib/errors/BadRequestError';
 import ForbiddenError from '../lib/errors/ForbiddenError';
 import NotFoundError from '../lib/errors/NotFoundError';
 import Comment from '../types/Comment';
-import { emitNotification } from '../lib/socket';
+import Article from '../types/Article';
+import { NotificationType } from '../types/Notification';
 
 type CreateCommentData = Omit<
   Comment,
@@ -27,27 +28,6 @@ export async function createComment(data: CreateCommentData): Promise<Comment> {
     if (!article) {
       throw new NotFoundError('article', data.articleId);
     }
-
-    const comment = await commentsRepository.createComment({
-      ...data,
-      articleId: data.articleId,
-      productId: null,
-    });
-
-    await notificationRepository.createNotification({
-      userId: article.userId,
-      type: '댓글 알림',
-      content: '댓글 달림',
-      articleId: article.id,
-    });
-
-    emitNotification(article.userId, {
-      type: '댓글 알림',
-      content: '댓글 달림',
-      articleId: article.id,
-    });
-
-    return comment;
   }
 
   if (data.productId) {
@@ -55,17 +35,30 @@ export async function createComment(data: CreateCommentData): Promise<Comment> {
     if (!product) {
       throw new NotFoundError('product', data.productId);
     }
-
-    const comment = await commentsRepository.createComment({
-      ...data,
-      articleId: null,
-      productId: data.productId,
-    });
-
-    return comment;
   }
 
-  throw new Error('Unexpected error');
+  const comment = await commentsRepository.createComment({
+    ...data,
+    articleId: data.articleId ?? null,
+    productId: data.productId ?? null,
+  });
+
+  /** New comment notification */
+  if (data.articleId) {
+    const article = (await articlesRepository.getArticle(data.articleId)) as Article;
+    const commentWriterId = data.userId;
+    const articleWriterId = article.userId;
+    if (articleWriterId !== commentWriterId) {
+      await notificationsService.createNotification({
+        userId: articleWriterId,
+        type: NotificationType.NEW_COMMENT,
+        payload: {
+          articleId: data.articleId,
+        },
+      });
+    }
+  }
+  return comment;
 }
 
 export async function getComment(id: number): Promise<Comment | null> {
