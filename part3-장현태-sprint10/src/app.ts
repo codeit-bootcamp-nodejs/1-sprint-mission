@@ -7,6 +7,7 @@ import userRouter from "./routers/userRouter";
 import notificationRouter from "./routers/notificationRouter";
 import { errorHandler } from "./middleware/errorHandler";
 import cookieParser from "cookie-parser";
+import fileRouter from "./routers/fileRouter";
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ app.use("/comments", commentRouter);
 app.use("/products", productRouter);
 app.use("/users", userRouter);
 app.use("/notifications", notificationRouter);
+app.use("/files", fileRouter);
 
 app.use(errorHandler);
 
