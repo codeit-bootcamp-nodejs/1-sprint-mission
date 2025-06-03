@@ -13,7 +13,7 @@ async function verifyPassword(user: User, password: string) {
   return await bcrypt.compare(password, user.password);
 }
 
-async function hashPassword(password: string) {
+export async function hashPassword(password: string) {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
 }

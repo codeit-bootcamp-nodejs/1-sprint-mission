@@ -2,9 +2,11 @@
 .vscode/
 node_modules/
 .env
+*.env.test
 !.env.example
 build/
 tests
+coverage
 
 # Uploaded files
 public/*
