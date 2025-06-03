@@ -10,6 +10,7 @@ import {
 } from "../controllers/userController";
 import auth from "../lib/jwtAuth";
 import { catchHandler } from "../lib/catchHandler";
+import { readNotification } from "../controllers/notificationController";
 
 const userRoute = express.Router();
 
@@ -29,6 +30,11 @@ userRoute.get(
   "/notification",
   auth.verifyAccessToken,
   catchHandler(getMyNotification)
+);
+userRoute.patch(
+  "/notification/:id",
+  auth.verifyAccessToken,
+  catchHandler(readNotification)
 );
 userRoute.get("/me", auth.verifyAccessToken, catchHandler(getUser));
 userRoute.patch("/:id", auth.verifyAccessToken, catchHandler(updateUser));

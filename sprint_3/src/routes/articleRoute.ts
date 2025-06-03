@@ -12,7 +12,6 @@ import auth from "../lib/jwtAuth";
 const articleRoute = express.Router();
 
 articleRoute.get("/", catchHandler(getArticle));
-articleRoute.get("/user", auth.verifyAccessToken, catchHandler(getArticle));
 articleRoute.post("/", auth.verifyAccessToken, catchHandler(createArticle));
 articleRoute.get("/:id", catchHandler(getArticleDetail));
 articleRoute.patch(

@@ -13,7 +13,7 @@ import { catchHandler } from "../lib/catchHandler";
 
 const productRoute = express.Router();
 
-productRoute.get("/", auth.verifyAccessToken, catchHandler(getProuct));
+productRoute.get("/", auth.optionalVerifyAccessToken, catchHandler(getProuct));
 productRoute.post("/", auth.verifyAccessToken, catchHandler(createProduct));
 productRoute.get("/:id", catchHandler(getProductDetail));
 productRoute.patch(

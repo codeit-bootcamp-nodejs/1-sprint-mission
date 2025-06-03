@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 import http from "http";
 import cookieParser from "cookie-parser";
-import { PORT, PUBLIC_PATH, STATIC_PATH } from "./lib/constants";
+import { PUBLIC_PATH, STATIC_PATH } from "./lib/constants";
 import userRoute from "./routes/userRoute";
 import productRoute from "./routes/productRoute";
 import articleRoute from "./routes/articleRoute";
@@ -17,8 +17,8 @@ import auth from "./lib/jwtAuth";
 import likeRoute from "./routes/likeRoute";
 import { setWebSocket } from "./services/websocket";
 
-const app = express();
-const server = http.createServer(app);
+export const app = express();
+export const server = http.createServer(app);
 
 setWebSocket(server);
 
@@ -36,7 +36,3 @@ app.use("/images", imagesRoute);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
-
-server.listen(PORT, () => {
-  console.log(`Server is listening on ${PORT}`);
-});

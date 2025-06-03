@@ -120,5 +120,5 @@ export default {
   createToken,
   getUserId,
   getMyProduct,
-  getMyNotification
+  getMyNotification,
 };

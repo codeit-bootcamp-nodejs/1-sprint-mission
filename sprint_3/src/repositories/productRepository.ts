@@ -26,23 +26,18 @@ const getAll = async (
     take: pageSize,
   });
 
-  let productsWithLike = products;
-
-  if (userId) {
-    productsWithLike = await Promise.all(
-      products.map(async (product) => {
-        const likeProduct = await likeRepository.likeProductStatus(
-          userId,
-          product.id
-        );
-        return {
-          ...product,
-          isLiked: likeProduct,
-        };
-      })
-    );
-  }
-
+  const productsWithLike = await Promise.all(
+    products.map(async (product) => {
+      let isLiked = false;
+      if (userId) {
+        isLiked = await likeRepository.likeProductStatus(userId, product.id);
+      }
+      return {
+        ...product,
+        isLiked,
+      };
+    })
+  );
   const totalCount = await prisma.product.count({ where });
 
   return { products: productsWithLike, totalCount };

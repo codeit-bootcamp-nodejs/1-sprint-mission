@@ -8,6 +8,7 @@ export const CreateProductBodyStuct = s.object({
   description: s.nonempty(s.string()),
   price: s.min(s.integer(), 0),
   tags: s.array(s.nonempty(s.string())),
+  images: s.array(s.nonempty(s.string())),
 });
 
 export const GetProductList = PageParamsStruct;

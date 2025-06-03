@@ -18,22 +18,6 @@ const getAll = async (
   return articles;
 };
 
-const getUserAll = async (
-  page: number,
-  pageSize: number,
-  orderBy: string,
-  userId: number
-) => {
-  const articles = await articleRepository.getUserAll(
-    page,
-    pageSize,
-    orderBy,
-    userId
-  );
-
-  return articles;
-};
-
 const create = async (data: ArticleDTO, authorId: number) => {
   return articleRepository.save(data, authorId);
 };
@@ -54,4 +38,4 @@ const update = async (id: number, article: UpdateArticleDTO) => {
 const deleteById = async (id: number) => {
   return await articleRepository.deleteById(id);
 };
-export default { getAll, getUserAll, create, getById, update, deleteById };
+export default { getAll, create, getById, update, deleteById };

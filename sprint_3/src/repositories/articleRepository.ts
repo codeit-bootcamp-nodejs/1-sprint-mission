@@ -7,42 +7,14 @@ const getAll = async (
   orderBy: string,
   search?: string
 ) => {
-  const where = {
-    AND: [
-      { title: search ? { contains: search } : undefined },
-      {
-        content: search ? { contains: search } : undefined,
-      },
-    ],
-  };
-
-  const articles = await prisma.article.findMany({
-    where,
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      createdAt: true,
-    },
-    orderBy: orderBy === "recent" ? { createdAt: "desc" } : { id: "asc" },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-  });
-
-  const totalCount = await prisma.article.count({ where });
-
-  return { articles, totalCount };
-};
-
-const getUserAll = async (
-  page: number,
-  pageSize: number,
-  orderBy: string,
-  userId: number
-) => {
-  const where = {
-    author: { id: userId },
-  };
+  const where = search
+    ? {
+        OR: [
+          { title: { contains: search } },
+          { content: { contains: search } },
+        ],
+      }
+    : {};
 
   const articles = await prisma.article.findMany({
     where,
@@ -100,4 +72,4 @@ const deleteById = async (id: number) => {
   return article;
 };
 
-export default { getAll, getUserAll, save, getById, update, deleteById };
+export default { getAll, save, getById, update, deleteById };

@@ -11,7 +11,7 @@ export const IdParamsStruct = s.object({
 export const PageParamsStruct = s.object({
   page: s.defaulted(integerString, 1),
   pageSize: s.defaulted(integerString, 10),
-  orderBy: s.enums(["recent"]),
+  orderBy: s.defaulted(s.enums(["recent", "asc"]), "recent"),
   search: s.optional(
     s.coerce(s.string(), s.string(), (value) => value?.trim().toLowerCase())
   ),
