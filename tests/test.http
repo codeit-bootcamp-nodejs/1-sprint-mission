@@ -186,3 +186,8 @@ GET http://localhost:3000/users/me/products?page=1&pageSize=5
 ### 내 좋아요 목록 가져오기 테스트
 GET http://localhost:3000/users/me/favorites?page=1&pageSize=5
 
+### 내 알림 조회하기
+GET http://localhost:3000/users/me/notifications?limit=5&cursor=2
+
+### 내 알림 읽기
+PATCH http://localhost:3000/notifications/1/read

@@ -5,9 +5,11 @@ import {
   UpdatePasswordBodyStruct,
   GetMyProductListParamsStruct,
   GetMyFavoriteListParamsStruct,
+  GetMyNotificationsParamsStruct,
 } from '../structs/usersStructs';
 import * as usersService from '../services/usersService';
 import * as authService from '../services/authService';
+import * as notificationsService from '../services/notificationsService';
 import userResponseDTO from '../dto/userResponseDTO';
 
 export async function getMe(req: Request, res: Response) {
@@ -58,17 +60,17 @@ export async function getMyFavoriteList(req: Request, res: Response) {
 }
 
 export async function getMyNotifications(req: Request, res: Response) {
-  const notifications = await usersService.getMyNotificationList(req.user.id);
-  res.send(notifications);
-}
+  const { cursor, limit } = create(req.query, GetMyNotificationsParamsStruct);
+  const { list, totalCount, unreadCount, nextCursor } =
+    await notificationsService.getMyNotifications(req.user.id, {
+      cursor,
+      limit,
+    });
 
-export async function getMyUnreadNotificationCount(req: Request, res: Response) {
-  const count = await usersService.getMyUnreadNotificationCount(req.user.id);
-  res.send({ count });
-}
-
-export async function updateMyNotificationReadStatus(req: Request, res: Response) {
-  const { id: notificationId } = req.params;
-  await usersService.updateMyNotificationReadStatus(req.user.id, Number(notificationId));
-  res.send('읽음 처리');
+  res.send({
+    list,
+    nextCursor,
+    unreadCount,
+    totalCount,
+  });
 }

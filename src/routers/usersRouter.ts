@@ -7,8 +7,6 @@ import {
   getMyProductList,
   getMyFavoriteList,
   getMyNotifications,
-  getMyUnreadNotificationCount,
-  updateMyNotificationReadStatus,
 } from '../controllers/usersController';
 import authenticate from '../middlewares/authenticate';
 
@@ -20,15 +18,5 @@ usersRouter.patch('/me/password', authenticate(), withAsync(updateMyPassword));
 usersRouter.get('/me/products', authenticate(), withAsync(getMyProductList));
 usersRouter.get('/me/favorites', authenticate(), withAsync(getMyFavoriteList));
 usersRouter.get('/me/notifications', authenticate(), withAsync(getMyNotifications));
-usersRouter.get(
-  '/me/notifications/unread-count',
-  authenticate(),
-  withAsync(getMyUnreadNotificationCount),
-);
-usersRouter.patch(
-  '/me/notifications/:id/read',
-  authenticate(),
-  withAsync(updateMyNotificationReadStatus),
-);
 
 export default usersRouter;

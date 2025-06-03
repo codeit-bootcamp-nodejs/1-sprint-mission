@@ -13,34 +13,37 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum NotificationType {
+  PRICE_CHANGED
+  NEW_COMMENT
+}
+
 model Article {
-  id           Int            @id @default(autoincrement())
-  title        String
-  content      String
-  image        String?
-  comments     Comment[]
-  user         User           @relation(fields: [userId], references: [id])
-  userId       Int
-  likes        Like[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Notification Notification[]
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  image     String?
+  comments  Comment[]
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  likes     Like[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Product {
-  id           Int            @id @default(autoincrement())
-  name         String
-  description  String
-  price        Int
-  tags         String[]
-  images       String[]
-  comments     Comment[]
-  user         User           @relation(fields: [userId], references: [id])
-  userId       Int
-  favorites    Favorite[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Notification Notification[]
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  tags        String[]
+  images      String[]
+  comments    Comment[]
+  user        User       @relation(fields: [userId], references: [id])
+  userId      Int
+  favorites   Favorite[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Comment {
@@ -69,7 +72,7 @@ model User {
   comments     Comment[]
   favorites    Favorite[]
   likes        Like[]
-  Notification Notification[]
+  notification Notification[]
 }
 
 model Favorite {
@@ -93,15 +96,12 @@ model Like {
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  type      String
-  content   String
-  isRead    Boolean  @default(false)
-  user      User     @relation(fields: [userId], references: [id])
+  id        Int              @id @default(autoincrement())
+  user      User             @relation(fields: [userId], references: [id])
   userId    Int
-  product   Product? @relation(fields: [productId], references: [id])
-  productId Int?
-  article   Article? @relation(fields: [articleId], references: [id])
-  articleId Int?
-  createdAt DateTime @default(now())
+  type      NotificationType
+  payload   Json
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
 }

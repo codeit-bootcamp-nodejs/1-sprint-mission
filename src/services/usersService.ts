@@ -2,7 +2,6 @@ import { Product } from '@prisma/client';
 import { PagePaginationParams, PagePaginationResult } from '../types/pagination';
 import * as usersRepository from '../repositories/usersRepository';
 import * as productsRepository from '../repositories/productsRepository';
-import * as notificationsRepository from '../repositories/notificationsRepository';
 import NotFoundError from '../lib/errors/NotFoundError';
 import User from '../types/User';
 
@@ -36,23 +35,4 @@ export async function getMyFavoriteList(
 ): Promise<PagePaginationResult<Product>> {
   const result = await productsRepository.getFavoriteProductListByOwnerId(userId, params);
   return result;
-}
-
-export async function getMyNotificationList(userId: number) {
-  const result = await notificationsRepository.getNotificationsByUserId(userId);
-  return result;
-}
-
-export async function getMyUnreadNotificationCount(userId: number) {
-  const count = await notificationsRepository.countUnreadByUserId(userId);
-  return count;
-}
-
-export async function updateMyNotificationReadStatus(userId: number, notificationId: number) {
-  const notification = await notificationsRepository.getNotificationById(notificationId);
-  if (!notification || notification.userId !== userId) {
-    throw new NotFoundError('notification', notificationId);
-  }
-
-  await notificationsRepository.updateReadStatus(notificationId);
 }
