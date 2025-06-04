@@ -19,7 +19,6 @@ export async function login(req: Request, res: Response): Promise<void> {
   const data = create(req.body, LoginBodyStruct);
   const { accessToken, refreshToken } = await authService.login(data);
   setTokenCookies(res, accessToken, refreshToken);
-  console.log(data);
   res.status(200).send();
 }
 

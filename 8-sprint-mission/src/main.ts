@@ -38,6 +38,8 @@ app.use("/notifications", notificationRouter);
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
 
-server.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+// server.listen(PORT, () => {
+//   console.log(`Server started on port ${PORT}`);
+// });
+
+export default app;

@@ -4,3 +4,4 @@ uploads/
 request/
 /3-sprint-mission/dist/
 /3-sprint-mission/prisma/migrations/
+coverage/

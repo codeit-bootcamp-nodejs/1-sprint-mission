@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import http from "http";
 import { verifyAccessToken } from "../lib/token";
 
+// 나중에 초기화
 let io: Server;
 
 export function setupSocket(server: http.Server) {
