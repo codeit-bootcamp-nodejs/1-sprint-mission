@@ -4,7 +4,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import { PORT, PUBLIC_PATH, STATIC_PATH } from './lib/constants';
 import { defaultNotFoundHandler, globalErrorHandler } from './controllers/errorController';
-import authRouter from './routers/authRouer';
+import authRouter from './routers/authRouter';
 import articleRouter from './routers/articleRouter';
 import productRouter from './routers/productRouter';
 import commentsRouter from './routers/commentsRouter';
@@ -13,7 +13,8 @@ import imagesRouter from './routers/imageRouter';
 import notificationRouter from './routers/notificationRouter';
 import http from 'http';
 import { setupWebSocket } from './services/SocketService';
-const app = express();
+
+export const app = express();
 
 const server = http.createServer(app);
 setupWebSocket(server);
@@ -33,7 +34,3 @@ app.use('/notifications', notificationRouter);
 
 app.use(defaultNotFoundHandler);
 app.use(globalErrorHandler);
-
-server.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});

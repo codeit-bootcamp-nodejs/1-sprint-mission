@@ -18,7 +18,7 @@ export const updateComment = async (req: Request, res: Response): Promise<void> 
   const comment = await getByCommentId(id);
 
   if (!comment) {
-    throw new NotFoundError('Comment not found', id);
+    throw new NotFoundError('Comment', id);
   }
 
   if (comment.userId !== req.user.id) {
@@ -39,7 +39,7 @@ export const deleteComment = async (req: Request, res: Response): Promise<void> 
   const comment = await getByCommentId(id);
 
   if (!comment) {
-    throw new NotFoundError('Comment not found', id);
+    throw new NotFoundError('Comment', id);
   }
 
   if (comment.userId !== req.user.id) {

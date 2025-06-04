@@ -24,7 +24,7 @@ import { createLikeService, deleteLikeService } from '../services/likeService';
 
 export const createArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
-    throw new UnauthorizedError('credentials_required');
+    throw new UnauthorizedError('Unauthorized');
   }
   const data = create(req.body, CreateArticleBodyStruct);
 
@@ -43,7 +43,7 @@ export const getArticleDetail = async (req: Request, res: Response): Promise<voi
 
 export const updateArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
-    throw new UnauthorizedError('credentials_required');
+    throw new UnauthorizedError('Unauthorized');
   }
 
   const { id } = create(req.params, IdParamsStruct);
@@ -51,7 +51,7 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
   const article = await getById(id);
 
   if (!article) {
-    throw new NotFoundError('article not found', id);
+    throw new NotFoundError('article', id);
   }
 
   if (article.userId !== req.user.id) {
@@ -65,13 +65,13 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
 
 export const deleteArticle = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
-    throw new UnauthorizedError('credentials_required');
+    throw new UnauthorizedError('Unauthorized');
   }
   const { id } = create(req.params, IdParamsStruct);
   const article = await getById(id);
 
   if (!article) {
-    throw new NotFoundError('article not found', id);
+    throw new NotFoundError('article', id);
   }
 
   if (article.userId !== req.user.id) {
@@ -94,7 +94,7 @@ export const getArticleList = async (req: Request, res: Response): Promise<void>
 
 export const createComment = async (req: Request, res: Response): Promise<void> => {
   if (!req.user) {
-    throw new UnauthorizedError('credentials_required');
+    throw new UnauthorizedError('Unauthorized');
   }
 
   const { id: articleId } = create(req.params, IdParamsStruct);

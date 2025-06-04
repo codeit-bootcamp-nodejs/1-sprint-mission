@@ -52,7 +52,7 @@ export const updateProduct = async (req: Request, res: Response): Promise<void> 
   const product = await getById(id);
 
   if (!product) {
-    throw new NotFoundError('product not found', id);
+    throw new NotFoundError('product', id);
   }
 
   if (product.userId !== req.user.id) {
@@ -84,7 +84,7 @@ export const deleteProduct = async (req: Request, res: Response): Promise<void> 
   const product = await getById(id);
 
   if (!product) {
-    throw new NotFoundError('product not found', id);
+    throw new NotFoundError('product', id);
   }
 
   if (product.userId !== req.user.id) {

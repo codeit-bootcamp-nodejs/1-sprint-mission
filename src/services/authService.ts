@@ -52,7 +52,15 @@ export const refreshTokenService = async (req: Request, res: Response): Promise<
     throw new BadRequestError('Invalid refresh token');
   }
 
-  const { userId } = verifyRefreshToken(refreshToken);
+  // const { userId } = verifyRefreshToken(refreshToken);
+
+  let userId;
+  try {
+    const payload = verifyRefreshToken(refreshToken);
+    userId = payload.userId;
+  } catch (err) {
+    throw new BadRequestError('Invalid refresh token');
+  }
 
   const user = await findById(userId);
   if (!user) {

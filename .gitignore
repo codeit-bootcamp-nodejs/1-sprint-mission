@@ -1,8 +1,11 @@
 /node_modules
 .env
+.env.test
 /tests
 /prisma/migrations
 1-sprint-mission/
+/coverage
+test.http
 
 # Uploaded files
 # public/*
