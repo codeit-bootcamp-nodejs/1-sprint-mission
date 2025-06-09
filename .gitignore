@@ -6,6 +6,8 @@
 1-sprint-mission/
 /coverage
 test.http
+/dist
+/upload
 
 # Uploaded files
 # public/*
