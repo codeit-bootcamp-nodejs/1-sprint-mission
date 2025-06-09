@@ -6,3 +6,8 @@ export const PORT = process.env.PORT || 3000;
 export const PUBLIC_PATH = "./public";
 export const STATIC_PATH = "/public";
 export const JWT_SECRET = process.env.JWT_SECRET as string;
+export const AWS_REGION = process.env.AWS_REGION as string;
+export const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID as string;
+export const AWS_SECRET_ACCESS_KEY = process.env
+  .AWS_SECRET_ACCESS_KEY as string;
+export const NODE_ENV = process.env.NODE_ENV;

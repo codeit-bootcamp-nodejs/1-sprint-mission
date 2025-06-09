@@ -2,5 +2,6 @@ import { server } from "./app";
 import { PORT } from "./lib/constants";
 
 server.listen(PORT, () => {
-  console.log(`Server is listening on ${PORT}`);
+  const env = process.env.NODE_ENV === "production" ? "PRODUCTION" : "DEVELOPMENT";
+  console.log(`Server is listening on ${PORT} - Running in ${env} mode`);
 });
