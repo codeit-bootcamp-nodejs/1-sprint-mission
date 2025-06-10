@@ -11,8 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
+} 
 model Article {
   id             Int       @id @default(autoincrement())
   title          String
@@ -91,7 +90,7 @@ model Like {
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
+  id        Int      @id @default(autoincrement()) 
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   type      String
@@ -100,3 +99,4 @@ model Notification {
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
 }
+ 
