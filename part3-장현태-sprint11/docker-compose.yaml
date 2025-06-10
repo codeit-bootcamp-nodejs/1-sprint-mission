@@ -13,7 +13,7 @@ services:
     container_name: sprintmission11_container
     environment:
       - SERVER_PORT=3000
-      - DATABASE_URL=postgresql://postgres:password@db:5432/sprintmission11_db?schema=public
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_DB_HOST}:${POSTGRES_DB_PORT}/${POSTGRES_DB}?schema=public
     ports:
       - "3000:3000"
     networks:
@@ -23,9 +23,9 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: sprintmission11_db
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - "5434:5432"
     networks:
