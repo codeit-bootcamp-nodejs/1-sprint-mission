@@ -2,7 +2,8 @@
 .vscode/
 node_modules/
 .env
-*.env.test
+.env.test
+.env.production
 !.env.example
 build/
 tests
