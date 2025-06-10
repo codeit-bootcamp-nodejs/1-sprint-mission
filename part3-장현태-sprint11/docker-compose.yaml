@@ -1,0 +1,38 @@
+name: sprintmission11
+services:
+  server:
+    image: hyentaejang/sprintmission11_serverimage
+    build:
+      tags:
+        - hyentaejang/sprintmission11
+      args:
+        - NODE_VERSION=20.12.1
+      dockerfile: Dockerfile
+      pull: true
+      context: .
+    container_name: sprintmission11_container
+    environment:
+      - SERVER_PORT=3000
+      - DATABASE_URL=postgresql://postgres:password@db:5432/sprintmission11_db?schema=public
+    ports:
+      - "3000:3000"
+    networks:
+      - network-a
+    volumes:
+      - uploadFiles:/app/uploads:rw
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sprintmission11_db
+    ports:
+      - "5434:5432"
+    networks:
+      - network-a
+
+networks:
+  network-a:
+
+volumes:
+  uploadFiles:
