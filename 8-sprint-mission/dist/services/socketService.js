@@ -4,6 +4,7 @@ exports.setupSocket = setupSocket;
 exports.sendNotification = sendNotification;
 const socket_io_1 = require("socket.io");
 const token_1 = require("../lib/token");
+// 나중에 초기화
 let io;
 function setupSocket(server) {
     io = new socket_io_1.Server(server, {

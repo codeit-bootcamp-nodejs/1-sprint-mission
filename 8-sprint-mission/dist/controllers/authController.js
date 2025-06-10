@@ -66,7 +66,6 @@ function login(req, res) {
         const data = (0, superstruct_1.create)(req.body, authStructs_1.LoginBodyStruct);
         const { accessToken, refreshToken } = yield authService.login(data);
         setTokenCookies(res, accessToken, refreshToken);
-        console.log(data);
         res.status(200).send();
     });
 }

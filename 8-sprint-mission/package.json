@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/main.js",
-    "dev": "nodemon --watch src src/main.ts",
+    "dev": "nodemon --watch src src/app.ts",
     "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest -i --coverage",
     "prisma:seed": "ts-node prisma/seed.ts",
     "prisma:generate": "prisma generate",
@@ -39,6 +39,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.820.0",
     "@prisma/client": "^5.16.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",

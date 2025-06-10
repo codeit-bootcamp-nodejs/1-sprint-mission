@@ -1,5 +1,5 @@
 import http from "http";
-import app from "../src/main";
+import app from "./main";
 import { setupSocket } from "./services/socketService";
 import { PORT } from "./lib/constants";
 

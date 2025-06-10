@@ -34,6 +34,7 @@ app.use("/users", usersRouter_1.default);
 app.use("/notifications", notificationsRouter_1.default);
 app.use(errorController_1.defaultNotFoundHandler);
 app.use(errorController_1.globalErrorHandler);
-server.listen(constants_1.PORT, () => {
-    console.log(`Server started on port ${constants_1.PORT}`);
-});
+// server.listen(PORT, () => {
+//   console.log(`Server started on port ${PORT}`);
+// });
+exports.default = app;
