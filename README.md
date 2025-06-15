@@ -1,6 +1,7 @@
 # Panda Market API
 
 ## 환경 변수 설정
+
 `.env.example` 파일을 참고해서 `.env`와 `.env.test`에 필요한 환경 변수를 설정해 주세요.
 
 ## 설치
@@ -12,6 +13,7 @@ npm install
 ```
 
 Prisma와 데이터베이스를 준비합니다.
+
 ```
 npx prisma generate
 npx prisma migrate dev
@@ -21,33 +23,13 @@ npx prisma migrate dev
 
 `npm dev`로 개발 모드로 실행할 수 있습니다.
 
-## 테스트 관련 설명
+## 스프린트 미션 10 관련 설명
 
-### 테스트 실행
+### 이미지 업로드 구현
 
-`npm test`로 테스트를 실행할 수 있습니다.
+- multer-s3는 유지보수가 되고 있지 않아, 편의상 multer에서 제공하는 메모리 스토리지를 사용해 form-data를 처리하고, @aws-sdk/client-s3로 저장하도록 구현했습니다. (`src/services/imagesService.ts` 파일)
+- 여기서는 편의상 multer 미들웨어를 사용했지만, 더 나은 이미지 업로드 구현 방식도 고민해 보시면 좋을 것 같습니다!
 
-(해당 명령어에서 `.env.test`에 명시된 데이터베이스에 `prisma migrate`를 실행합니다.)
+### 배포 관련 설정들
 
-### 테스트 파일의 위치
-
-테스트 파일은 소스 코드 파일과 동일한 폴더에 있습니다.
-
-- 상품 API 통합 테스트: `src/routers/productsRouter.test.ts`
-- 게시글 API 통합 테스트: `src/routers/articlesRouter.test.ts`
-- 인증 API 통합 테스트: `src/routers/authRouter.test.ts`
-- 상품 API 비즈니스 로직 유닛 테스트: `src/routers/productsService.test.ts`
-- 게시글 API 비즈니스 로직 유닛 테스트: `src/routers/articlesService.test.ts`
-
-### tsconfig.json 설정
-
-테스트 파일은 빌드에서 제외해야하기 때문에 `exclude`로 지정해 주었습니다.
-
-```json
-"include": [
-  "src/**/*.ts"
-],
-"exclude": [
-  "src/**/*.test.ts"
-]
-```
+- `/infra` 폴더에 참고할 수 있는 파일들을 올려두었습니다.
