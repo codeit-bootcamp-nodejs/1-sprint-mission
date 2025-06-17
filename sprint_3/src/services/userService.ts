@@ -61,6 +61,7 @@ const getUser = async (email: string, password: string) => {
 
   if (!user) {
     throw new NotFoundError("유저");
+
   }
 
   await verifyPassword(password, user.password);
@@ -68,6 +69,7 @@ const getUser = async (email: string, password: string) => {
 };
 
 const updateUser = async (id: number, data: UpdateUserDTO) => {
+
   const dataToUpdate = { ...data };
   if (dataToUpdate.password) {
     const hashedPassword = await hashingPassword(dataToUpdate.password);
@@ -121,4 +123,5 @@ export default {
   getUserId,
   getMyProduct,
   getMyNotification,
+
 };

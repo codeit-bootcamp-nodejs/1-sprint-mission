@@ -21,3 +21,4 @@ const findByProductId = async (productId: number) => {
 };
 
 export default { getLikedProducts, findByProductId, likeProduct };
+

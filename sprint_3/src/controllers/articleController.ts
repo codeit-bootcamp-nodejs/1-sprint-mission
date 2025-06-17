@@ -1,3 +1,4 @@
+
 import { RequestHandler } from "express";
 import { create } from "superstruct";
 import articleService from "../services/articleService";
@@ -29,6 +30,7 @@ export const getArticleDetail: RequestHandler = async (req, res) => {
   res.status(200).send(article);
 };
 
+
 export const patchArticle: RequestHandler = async (req, res) => {
   const { id } = create(req.params, IdParamsStruct);
   const content = create(req.body, UpdateArticleBodyStuct);
@@ -39,5 +41,6 @@ export const patchArticle: RequestHandler = async (req, res) => {
 export const deleteArticle: RequestHandler = async (req, res) => {
   const { id } = create(req.params, IdParamsStruct);
   await articleService.deleteById(id);
+
   res.sendStatus(204);
 };

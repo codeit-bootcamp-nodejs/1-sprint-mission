@@ -1,0 +1,43 @@
+name: pandamarket-app
+services:
+  server:
+    image: blairjo/panda
+    build:
+      tags:
+        - blairjo/panda:latest
+      args:
+        - NODE_VERSION=20.12.1
+      dockerfile: Dockerfile
+      context: .
+    container_name: panda-app
+    environment:
+      - SERVER_PORT=3000
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - panda-network
+    ports:
+      - 3000:3000
+    volumes:
+      - volume-panda:/public:rw
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: panda_app
+    ports:
+      - "5434:5432"
+    networks:
+      - panda-network
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+networks:
+  panda-network:
+
+volumes:
+  volume-panda:
+  db_data:

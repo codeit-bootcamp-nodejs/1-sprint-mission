@@ -13,6 +13,7 @@ const update = async (id: number, data: UpdateCommentDTO) => {
   const comments = await prisma.comment.update({
     where: { id },
     data,
+
   });
 
   return comments;
@@ -31,6 +32,7 @@ const getProductId = async (
   take: number,
   userId: number
 ) => {
+
   const lastId = cursor ? cursor : null;
   const comments = await prisma.comment.findMany({
     take: take,
@@ -38,7 +40,7 @@ const getProductId = async (
     orderBy: {
       createdAt: "desc",
     },
-    where: { productId, AND: { author: { id: userId } } },
+    where: { productId },
     select: {
       id: true,
       content: true,
@@ -81,7 +83,7 @@ const getArticleId = async (
     orderBy: {
       createdAt: "desc",
     },
-    where: { articleId, AND: { author: { id: userId } } },
+    where: { articleId },
     select: {
       id: true,
       content: true,

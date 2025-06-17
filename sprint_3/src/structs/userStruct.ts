@@ -23,3 +23,4 @@ export const CreateUserBodyStruct = s.object({
 });
 
 export const UpdateUserBodyStruct = s.partial(CreateUserBodyStruct);
+

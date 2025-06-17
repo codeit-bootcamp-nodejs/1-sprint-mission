@@ -1,3 +1,4 @@
+
 import { CommentDTO, UpdateCommentDTO } from "../dto/CommentDTO";
 import commentRepository from "../repositories/commentRepository";
 
@@ -27,6 +28,7 @@ const getProductId = async (
   const nextCursor =
     comments.length > 0 ? comments[comments.length - 1].id : null;
   return { comments, nextCursor };
+
 };
 
 const createProductComment = async (
@@ -34,6 +36,7 @@ const createProductComment = async (
   comment: CommentDTO,
   userId: number
 ) => {
+
   const creatComment = await commentRepository.createProductComment(
     productId,
     comment,
@@ -56,6 +59,7 @@ const getArticleId = async (
     userId
   );
 
+
   const comments = commentData.comments;
 
   const nextCursor =
@@ -68,6 +72,7 @@ const createArticleComment = async (
   comment: CommentDTO,
   userId: number
 ) => {
+
   const creatComment = await commentRepository.createArticleComment(
     articleId,
     comment,

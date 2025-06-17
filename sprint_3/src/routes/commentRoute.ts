@@ -9,12 +9,14 @@ import {
 } from "../controllers/commentController";
 import auth from "../lib/jwtAuth";
 import { verifyCommentAuth } from "../lib/tokenAuth";
+
 import { catchHandler } from "../lib/catchHandler";
 
 const commentRoute = express.Router();
 
 commentRoute.patch("/:id", verifyCommentAuth, catchHandler(patchComment));
 commentRoute.delete("/:id", verifyCommentAuth, catchHandler(deleteComment));
+
 commentRoute.get("/products/:id", catchHandler(getProductCommentList));
 commentRoute.post(
   "/products/:id",

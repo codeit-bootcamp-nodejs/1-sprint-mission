@@ -1,0 +1,31 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Echo test
+        run: echo ${{ vars.TEST }}
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/ec2-user/1-sprint-mission
+            git pull origin main 
+            cd sprint_3
+            npm install
+            npm run build
+            npm run prisma:deploy 
+            pm2 reload sprint-app
+            echo "Deployment successful!"

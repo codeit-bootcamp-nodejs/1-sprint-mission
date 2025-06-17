@@ -11,6 +11,7 @@ const getAll = async (
 ) => {
   const where = {
     name: search ? { contains: search } : undefined,
+
   };
 
   const products = await prisma.product.findMany({
@@ -56,6 +57,7 @@ const save = async (data: ProductDTO, authorId: number) => {
 };
 
 const getById = async (id: number) => {
+
   const product = await prisma.product.findUnique({
     where: { id },
   });
@@ -76,5 +78,6 @@ const deleteProduct = async (id: number) => {
   });
   return product;
 };
+
 
 export default { save, getById, update, deleteProduct, getAll };

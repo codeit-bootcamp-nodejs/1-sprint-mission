@@ -1,15 +1,15 @@
 
-# Keep environment variables out of version control
-.env
 .DS_Store
 sprint_3/node_modules/
 sprint_3/request/
 sprint_5/node_modules/
 sprint_3/coverage/
+sprint_3/.env
+sprint_3/.env.test
 .vscode
 sprint_3/dist/
-sprint_3/public
+sprint_3/public/
 sprint_5/dist/
-sprint_5/public
-jwt_secret.txt
-
+sprint_5/p
+sprint_5/.env
+.git

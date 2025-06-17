@@ -54,4 +54,5 @@ export default {
   update,
   getProduct,
   getNotification,
+
 };

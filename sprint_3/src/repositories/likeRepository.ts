@@ -1,3 +1,4 @@
+
 import { tuple } from "superstruct";
 import prisma from "../config/prisma";
 
@@ -16,6 +17,7 @@ const getLikedProducts = async (userId: number) => {
 };
 
 const likeProduct = async (userId: number, productId: number) => {
+
   const like = await prisma.like.create({
     data: {
       authorId: userId,
@@ -34,6 +36,7 @@ const likeProduct = async (userId: number, productId: number) => {
 };
 
 const unLikeProduct = async (userId: number, productId: number) => {
+
   const unlike = await prisma.like.deleteMany({
     where: {
       authorId: userId,
@@ -52,6 +55,7 @@ const unLikeProduct = async (userId: number, productId: number) => {
 };
 
 const likeProductStatus = async (userId: number, productId: number) => {
+
   const likeStatus = await prisma.like.findFirst({
     where: {
       authorId: userId,
@@ -71,10 +75,12 @@ const likePeople = async (productId: number) => {
   return likePeople;
 };
 
+
 export default {
   getLikedProducts,
   likeProduct,
   likeProductStatus,
   unLikeProduct,
   likePeople
+
 };

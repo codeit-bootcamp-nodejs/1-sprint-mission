@@ -1,3 +1,4 @@
+
 import { ProductDTO, UpdateProductDTO } from "../dto/ProductDTO";
 import NotFoundError from "../lib/error/NotFoundError";
 import productRepository from "../repositories/productRepository";

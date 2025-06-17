@@ -1,3 +1,4 @@
+
 import { ArticleDTO, UpdateArticleDTO } from "../dto/ArticleDTO";
 import NotFoundError from "../lib/error/NotFoundError";
 import articleRepository from "../repositories/articleRepository";

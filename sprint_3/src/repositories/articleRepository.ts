@@ -15,7 +15,6 @@ const getAll = async (
         ],
       }
     : {};
-
   const articles = await prisma.article.findMany({
     where,
     select: {
@@ -39,10 +38,12 @@ const save = async (data: ArticleDTO, authorId: number) => {
     data: {
       ...data,
       author: { connect: { id: authorId } },
+
     },
   });
 
   return createdArticle;
+
 };
 
 const getById = async (id: number) => {
@@ -53,6 +54,7 @@ const getById = async (id: number) => {
 };
 
 const update = async (id: number, article: UpdateArticleDTO) => {
+
   const updatedArticle = await prisma.article.update({
     where: { id },
     data: {
@@ -61,10 +63,12 @@ const update = async (id: number, article: UpdateArticleDTO) => {
     },
   });
 
+
   return updatedArticle;
 };
 
 const deleteById = async (id: number) => {
+
   const article = await prisma.article.delete({
     where: { id },
   });
