@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app';
+import app from '../main';
 import { prismaClient } from '../lib/prismaClient';
 
 let agent: ReturnType<typeof request.agent>;

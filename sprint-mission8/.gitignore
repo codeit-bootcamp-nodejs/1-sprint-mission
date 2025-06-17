@@ -8,6 +8,7 @@ node_modules/
 build/
 tests
 coverage
+package-lock.json
 
 # Uploaded files
 public/*

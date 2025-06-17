@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'development';
 
 import request from 'supertest';
-import app from '../app';
+import app from '../main';
 import { prismaClient } from '../lib/prismaClient';
 import { hashPassword } from '../services/authService';
 
