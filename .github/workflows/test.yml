@@ -1,0 +1,53 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main # main 브랜치에 푸시될 때 실행
+  pull_request:
+    branches:
+      - main # main 브랜치로 향하는 Pull Request가 생성/업데이트될 때 실행
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # PostgreSQL 서비스를 Docker 컨테이너로 함께 실행
+    services:
+      postgres:
+        image: postgres:14 # PostgreSQL 14 버전 사용
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        ports:
+          - 5432:5432 # 로컬에서 5432 포트를 통해 접근 가능
+        options: >- # DB가 준비될 때까지 기다리는 설정 (헬스 체크)
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 'lts/*'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Set up .nev
+        run: echo "${{ secrets.ENV }}" > .env
+
+      - name: Apply DB Schema
+        run: npm run prisma:migrate # Prisma 마이그레이션 적용 (testdb에 스키마 반영)
+
+      - name: Type Check
+        run: npm run typecheck # TypeScript 타입 검사 수행
+
+      - name: Run Tests
+        run: npm run test

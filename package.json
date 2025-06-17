@@ -24,12 +24,16 @@
   },
   "scripts": {
     "dev": "nodemon --watch src src/main.ts",
-    "start": "node dist/app.js",
+    "start": "node dist/main.js",
     "build": "tsc",
     "test": "dotenv -e .env.test -- npm run prisma:migrate && dotenv -e .env.test -- jest -i  --coverage",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "ts-node prisma/seed.ts"
+    "prisma:seed": "ts-node prisma/seed.ts",
+    "prisma:deploy": "npx prisma migrate deploy && npx prisma generate",
+    "typecheck": "tsc --noEmit",
+    "test:local": "dotenv -e .env.test -- prisma migrate dev && dotenv -e .env.test -- jest -i --coverage",
+    "test:ci": "jest"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

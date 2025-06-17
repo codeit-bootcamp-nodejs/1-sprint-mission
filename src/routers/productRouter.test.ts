@@ -789,6 +789,10 @@ describe('Proproduct 관련 테스트', () => {
 
   describe('createNotification', () => {
     test('존재하는 유저에게 알림을 생성하면 DB에 저장된다', async () => {
+      await prismaClient.product.deleteMany();
+      await prismaClient.notification.deleteMany();
+      await prismaClient.user.deleteMany();
+
       const user = await prismaClient.user.create({
         data: {
           email: 'notify@test.com',

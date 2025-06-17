@@ -1,0 +1,32 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.6
+        env:
+          ENV: ${{ secrets.ENV }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          envs: ENV
+          port: 22
+          script: |
+            cd /home/ec2-user/1-sprint-mission # EC2 인스턴스 내 프로젝트 경로로 진입
+            rm -rf .env
+            git pull origin main # 코드 최신화
+            echo "$ENV" > .env
+            npm install
+            npm run build
+            npm run prisma:deploy
+            pm2 reload mission10-app # PM2로 재실행
+            echo "Deployment successful!"

@@ -1,0 +1,31 @@
+# Node.js
+node_modules
+npm-debug.log
+yarn-error.log
+
+# 환경 설정 파일
+.env
+.env.*  # .env.production, .env.local 등
+
+# OS/에디터 관련 불필요 파일
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+
+# Git 관련
+.git
+.gitignore
+
+# 테스트 및 로그
+coverage
+*.log
+
+# 빌드 산출물 (예: TypeScript → JavaScript 결과물)
+dist
+build
+
+# 기타
+upload
+public
+infra
