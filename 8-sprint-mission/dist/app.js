@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+console.log("starting Server...");
 const http_1 = __importDefault(require("http"));
 const main_1 = __importDefault(require("./main"));
 const socketService_1 = require("./services/socketService");

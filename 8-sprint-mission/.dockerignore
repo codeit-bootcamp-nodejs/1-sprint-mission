@@ -1,0 +1,12 @@
+node_modules
+
+logs
+
+.env
+.env.*
+
+.git
+.gitignore
+
+dist
+build

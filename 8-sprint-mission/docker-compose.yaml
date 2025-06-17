@@ -1,0 +1,39 @@
+name: SprintMission11
+services:
+  server:
+    image: min7332/express
+    build:
+      tags:
+        - min7332/express:latest
+      args:
+        - NODE_VERSION=20.12.1
+      dockerfile: Dockerfile
+      pull: true
+      context: .
+    container_name: express-app
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:password@db:5432/express_app
+    ports:
+      - "3000:3000"
+    networks:
+      - network-a
+    volumes:
+      - uploads:/app/uploads
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: express_app
+    ports:
+      - "5434:5432"
+    networks:
+      - network-a
+
+networks:
+  network-a:
+
+volumes:
+  uploads:
+  volume-a:
