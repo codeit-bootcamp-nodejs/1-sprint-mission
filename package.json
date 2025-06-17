@@ -3,7 +3,11 @@
     "start": "node ./build/main.js",
     "build": "tsc",
     "dev": "nodemon ./src/main.ts --watch ./src",
-    "test": "dotenv -e .env.test -- prisma migrate dev && dotenv -e .env.test -- jest -i --coverage"
+    "typecheck": "tsc --noEmit",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:deploy": "npx prisma migrate deploy && npx prisma generate",
+    "test:local": "dotenv -e .env.test -- prisma migrate dev && dotenv -e .env.test -- jest -i --coverage",
+    "test:ci": "jest"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
